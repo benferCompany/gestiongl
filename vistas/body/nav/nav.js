@@ -1,5 +1,13 @@
+const style = ` <style>
+                
+
+
+                </style>`
 export const nav = () => {
-    return ` <nav>
+    return `
+        
+        ${style} 
+    <nav>
         <div>
             <button>Inicio</button>
             <button>Crear</button>
