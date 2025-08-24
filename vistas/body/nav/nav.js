@@ -32,5 +32,4 @@ export const nav = function () {
         <button>Balances</button>
     `;
     return nav;
->>>>>>> 17073f8dad8b0314f6f7f1700e87ea2b2f8d182f
 }
