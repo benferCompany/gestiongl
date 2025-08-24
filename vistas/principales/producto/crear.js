@@ -1,14 +1,18 @@
-export const crear = () => {
+import { consultarProducto } from "../../../controladores/principales/producto/consulta.js";
+
+export const crear =() => {
     const divPadre = document.createElement("div");
     divPadre.style.cssText = `
         display: flex;
         justify-content: space-around;
     `;
-
+    
     // Llamamos a la función para obtener el fragmento y lo agregamos
     divPadre.appendChild(formCrearProductoHtml());
     divPadre.appendChild(tableCrearProducto())
+   
     return divPadre;
+
 }
 
 const formCrearProductoHtml = () => {
@@ -102,6 +106,26 @@ const tableCrearProducto = () => {
                 padding: 10px;
                 border: 1px solid black;
             }
+            .btnEditar{
+                background-color: #38A0F5;
+                border-radius: 2px;
+                padding: 4px; 
+                width: 40px;
+                height: 25px;
+                color:whitesmoke; 
+                border:none; 
+                cursor:pointer;}
+            .btnEliminar{
+            
+                color:whitesmoke; 
+                width: 40px;
+                height: 25px;
+                background-color: #DA5252;
+                padding: 5px; 
+                border:none; 
+                border-radius: 4px;
+        
+            }    
     
     </style>
 
@@ -117,29 +141,16 @@ const tableCrearProducto = () => {
                         <th>Acción</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tbodyProducto">
                     <tr>
                         <td>idProd01</td>
                         <td>Descripción del producto</td>
                         <td>$100</td>
                         <td>$200</td>
                         <td>
-                            <button style="background-color: #38A0F5;
-                                            border-radius: 2px;
-                                            padding: 4px; 
-                                            width: 40px;
-                                            height: 25px;
-                                            color:whitesmoke; 
-                                            border:none; 
-                                            cursor:pointer;"><i class="fas fa-pencil-alt"></i>
+                            <button class="btnEditar"><i class="fas fa-pencil-alt"></i>
                             </button>
-                            <button style="color:whitesmoke; 
-                                            width: 40px;
-                                            height: 25px;
-                                            background-color: #DA5252;
-                                            padding: 5px; 
-                                            border:none; 
-                                            border-radius: 4px;"><i class="fas fa-trash"></i>
+                            <button class="btnEliminar" ><i class="fas fa-trash"></i>
                             </button>
                         </td>
                     </tr>

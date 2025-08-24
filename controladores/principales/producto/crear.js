@@ -1,7 +1,6 @@
 import { fadeInFadeOut } from "../../hooks.js";
 
 export const submitCrearProd = async (form) => {
-    console.log(form);
     let mensaje = "";
     const formulario = new FormData(form);
     console.log(form.elements["descripcion"].value);
