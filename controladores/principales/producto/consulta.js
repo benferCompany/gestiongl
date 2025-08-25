@@ -1,6 +1,6 @@
 import { consulta } from "../../hooks.js"
 
-export const consultarProducto = async () => {
+export const consultarProducto = async (tbodyProducto) => {
     let htmlString = ""
     const productos = await consulta("http://localhost/servicios/principales/producto/consulta.php")
     productos.data.forEach(element => {
@@ -22,7 +22,7 @@ export const consultarProducto = async () => {
 
     });
 
-    const tbodyProducto = document.getElementById("tbodyProducto");
+    tbodyProducto = document.getElementById("tbodyProducto");
     tbodyProducto.innerHTML = htmlString
 
 }

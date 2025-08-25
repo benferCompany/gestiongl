@@ -2,7 +2,7 @@ import { consultarProducto } from "../../controladores/principales/producto/cons
 import { crear } from "../principales/producto/crear.js";
 import { nav } from "./nav/nav.js";
 
-const body = document.body;
 
-//body.appendChild(nav());
-body.appendChild(crear());
+const bodyNav =document.getElementById("nav");
+bodyNav.append(nav())
+//body.appendChild(crear());

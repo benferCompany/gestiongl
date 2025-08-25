@@ -48,3 +48,9 @@ export const fadeInFadeOut = (elemento,transitionFadeInt, transitionFadeOut)=>{
 }
 
 
+
+
+export const getButtonByText=(element, text)=> {
+    return [...element.querySelectorAll('button')]
+        .find(btn => btn.textContent.trim() === text);
+}

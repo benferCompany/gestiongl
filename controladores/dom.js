@@ -1,18 +1,12 @@
-import { consultarProducto } from "./principales/producto/consulta.js"
-import { submitCrearProd } from "./principales/producto/crear.js";
+import { navControlador } from "./body/nav/navControlador.js";
 
 
-window.addEventListener("DOMContentLoaded",async()=>{
-       
-    const formCrearProd = document.getElementById("formCrearProd");
-    formCrearProd.addEventListener("submit",async(e)=>{
-        e.preventDefault()
-        submitCrearProd(formCrearProd)
-        consultarProducto()
-    });
-    
-    await consultarProducto()
-        
+window.addEventListener("DOMContentLoaded", async () => {
+
+
+    navControlador(document.querySelector("nav"))
+
+
 })
 
 

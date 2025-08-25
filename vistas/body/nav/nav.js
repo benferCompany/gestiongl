@@ -9,11 +9,11 @@ const style = `
             padding: 1rem;
             display: flex;
             justify-content: space-around;
-            background-color: #e3eeffff;
+            background-color: #0f0f0fff;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.48);
         }
         button {
-            background-color: #4c5cf0ff;
+            background-color: rgba(240, 133, 33, 1);
             color: whitesmoke;
             cursor: pointer;
             border: none;
@@ -28,8 +28,9 @@ export const nav = function () {
         ${style}
         <button>Ventas</button>
         <button>Compras</button>
-        <button>Producto</button>
+        <button id ="idNavButtonProducto">Producto</button>
         <button>Balances</button>
+        <button>Clientes</button>
     `;
     return nav;
 }
