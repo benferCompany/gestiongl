@@ -23,7 +23,6 @@ export const consultarProducto = async (tbodyProducto) => {
 
     });
 
-    tbodyProducto = document.getElementById("tbodyProducto");
     tbodyProducto.innerHTML = htmlString
 
 }

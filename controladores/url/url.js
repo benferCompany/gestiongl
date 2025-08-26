@@ -1,1 +1,1 @@
-export const URL = "http://localhost/gestiongl";
+export const URL = "http://localhost";

@@ -29,6 +29,40 @@ export const consulta = async (URL) => {
 };
 
 
+export const eliminarDatosPorId = async (URL, id_producto) => {
+  try {
+    const response = await fetch(URL, {
+      method: "DELETE",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ id_producto })
+    });
+
+    // Leer siempre la respuesta como JSON
+    const data = await response.json();
+
+    if (!response.ok) {
+      // Lanzar error con información del servidor
+      throw new Error(data?.message || `Error HTTP ${response.status}`);
+    }
+
+    // Retornar datos en formato consistente
+    return data;
+
+  } catch (error) {
+    console.error("Error eliminando producto:", error);
+    return {
+      success: false,
+      data: null,
+      error: error.message
+    };
+  }
+};
+
+
+
 export const fadeInFadeOut = (elemento, transitionFadeInt, transitionFadeOut) => {
 
   elemento.style.display = 'block'; // Aseguramos que esté visible
@@ -57,12 +91,15 @@ export const getButtonByText = (element, text) => {
 export const buscarButton = (e) => {
   const btn = e.evento.closest("button");
 
+
   // Verificamos si el clic ocurrió dentro de un botón en el tbody
   if (btn && e.tbody.contains(btn)) {
     if (btn.classList.contains(e.clasesButton[0])) {
-      console.log("Editar");
+      
+      e.accionEditar(btn);
     } else if (btn.classList.contains(e.clasesButton[1])) {
-      console.log("Eliminar");
+ 
+      e.accionEliminar(btn);
     }
   }
 }

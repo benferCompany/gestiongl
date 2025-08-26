@@ -4,6 +4,8 @@ import { formulario } from "../../../controladores/principales/componentes/formu
 import { table } from "../../../controladores/principales/componentes/table.js";
 import { consultarProducto } from "../../../controladores/principales/producto/consulta.js";
 import { submitCrearProd } from "../../../controladores/principales/producto/crearControlador.js";
+import { editarProducto } from "../../../controladores/principales/producto/editarControlador.js";
+import { eliminarProducto } from "../../../controladores/principales/producto/eliminarControlador.js";
 
 export const crear = () => {
     const divPadre = document.createElement("div");
@@ -24,10 +26,14 @@ export const crear = () => {
         const parametroClick ={
             evento:e.target,
             tbody:tbody,
-            clasesButton:["btnEditar","btnEliminar"]
+            clasesButton:["btnEditar","btnEliminar"],
+            accionEditar: editarProducto,
+            accionEliminar:eliminarProducto
+
         }
     
-        buscarButton({evento:e.target,tbody:tbody});
+        
+        buscarButton(parametroClick);
     });
 
     form.addEventListener("submit", (e) => {
