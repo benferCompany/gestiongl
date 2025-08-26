@@ -1,16 +1,18 @@
 import { fadeInFadeOut } from "../../hooks.js";
+import { URL } from "../../url/url.js";
 
 export const submitCrearProd = async (form) => {
     let mensaje = "";
     const formulario = new FormData(form);
     console.log(form.elements["descripcion"].value);
+    
     if (form.elements["id_producto"].value == "" || form.elements["descripcion"].value == "" || form.elements["costo"].value == "" || form.elements["pvp"].value == "") {
         console.log("es")
         mensaje = {mensaje: "Debes llenar todo los campos", color:"red"}
     } else {
 
         try {
-            const response = await fetch("http://localhost/servicios/principales/producto/crear.php", {
+            const response = await fetch(URL+"/servicios/principales/producto/crear.php", {
                 method: "POST",
                 body: formulario
             });

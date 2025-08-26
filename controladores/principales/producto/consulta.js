@@ -1,8 +1,9 @@
 import { consulta } from "../../hooks.js"
+import { URL } from "../../url/url.js";
 
 export const consultarProducto = async (tbodyProducto) => {
     let htmlString = ""
-    const productos = await consulta("http://localhost/servicios/principales/producto/consulta.php")
+    const productos = await consulta(URL+"/servicios/principales/producto/consulta.php")
     productos.data.forEach(element => {
 
         htmlString += `  

@@ -1,3 +1,5 @@
+
+import { buscarButton } from "../../../controladores/hooks.js";
 import { formulario } from "../../../controladores/principales/componentes/formulario.js";
 import { table } from "../../../controladores/principales/componentes/table.js";
 import { consultarProducto } from "../../../controladores/principales/producto/consulta.js";
@@ -11,29 +13,28 @@ export const crear = () => {
     `;
 
     // Llamamos a la función para obtener el fragmento y lo agregamos
-    
+
     const formularioFragment = formCrearProductoHtml();
     const tableFragment = tableCrearProducto();
     const tbody = tableFragment.querySelector("tbody");
     const form = formularioFragment.querySelector("form");
-    
+    console.log(form)
     consultarProducto(tbody);
-    tbody.addEventListener("click",(e)=>{
-        
-        if(e.target.tagName =="BUTTON" || e.target.tagName =="I"){
-            
-            if(e.target.className =="btnEditar"){
-                console.log("Editar")
-            }else{
-                console.log("ELiminar")
-            }
+    tbody.addEventListener("click", (e) => {
+        const parametroClick ={
+            evento:e.target,
+            tbody:tbody,
+            clasesButton:["btnEditar","btnEliminar"]
         }
-    })
+    
+        buscarButton({evento:e.target,tbody:tbody});
+    });
 
-    form.addEventListener("submit", (e)=>{
+    form.addEventListener("submit", (e) => {
         e.preventDefault()
         submitCrearProd(form)
-        
+        consultarProducto(tbody);
+
     })
 
     divPadre.appendChild(formularioFragment);
@@ -45,7 +46,7 @@ export const crear = () => {
 
 const formCrearProductoHtml = () => {
     const parametros = {
-    style: `<style>
+        style: `<style>
         form {
             margin-top:3.2%;
             background-color:  #0f0f0fff;
@@ -86,22 +87,22 @@ const formCrearProductoHtml = () => {
         }
     </style>
     `,
-    idFormulario: "formCrearProd",
-    inputs: [
-        { type: "text", name: "id_producto", label: "Id Producto" },
-        { type: "text", name: "descripcion", label: "Descripción" },
-        { type: "number", name: "costo", label: "Costo" },
-        { type: "number", name: "PVP", label: "PVP" }
-    ],
-    submitValue: "Cargar",
-    idMensaje: "mensaje-crear-producto"
+        idFormulario: "formCrearProd",
+        inputs: [
+            { type: "text", name: "id_producto", label: "Id Producto" },
+            { type: "text", name: "descripcion", label: "Descripción" },
+            { type: "number", name: "costo", label: "Costo" },
+            { type: "number", name: "pvp", label: "PVP" }
+        ],
+        submitValue: "Cargar",
+        idMensaje: "mensaje-crear-producto"
 
 
 
-}
-    
+    }
+
     // Retorna un DocumentFragment que se puede insertar directamente en el DOM
-    formulario(parametros);
+    return formulario(parametros);
 }
 
 
@@ -161,7 +162,7 @@ const tableCrearProducto = () => {
         tbody: ["idProd01", "descripcion del producto", "$100", "$150"],
         idTbody: "tbodyProducto"
     }
-    return table(parametros);   
+    return table(parametros);
 }
 
 

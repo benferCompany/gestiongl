@@ -16,7 +16,7 @@ export const consulta = async (URL) => {
     }
 
     // Retornar datos en formato consistente
-   return data;
+    return data;
 
   } catch (error) {
     console.error("Error consultando productos:", error);
@@ -29,28 +29,40 @@ export const consulta = async (URL) => {
 };
 
 
+export const fadeInFadeOut = (elemento, transitionFadeInt, transitionFadeOut) => {
 
-export const fadeInFadeOut = (elemento,transitionFadeInt, transitionFadeOut)=>{
-  
-        elemento.style.display = 'block'; // Aseguramos que esté visible
-        setTimeout(() => {
-            elemento.classList.add('visible'); // Aplicamos fade-in
-        }, transitionFadeInt); // Pequeño delay para que funcione la transición
-    
-        setTimeout(() => {
-    
-            elemento.classList.remove('visible'); // Inicia fade-out
-            elemento.addEventListener('transitionend', () => {
-                elemento.style.display = 'none'; // Oculta después del fade
-            }, { once: true });
-        },transitionFadeOut)
-    
+  elemento.style.display = 'block'; // Aseguramos que esté visible
+  setTimeout(() => {
+    elemento.classList.add('visible'); // Aplicamos fade-in
+  }, transitionFadeInt); // Pequeño delay para que funcione la transición
+
+  setTimeout(() => {
+
+    elemento.classList.remove('visible'); // Inicia fade-out
+    elemento.addEventListener('transitionend', () => {
+      elemento.style.display = 'none'; // Oculta después del fade
+    }, { once: true });
+  }, transitionFadeOut)
+
 }
 
 
 
 
-export const getButtonByText=(element, text)=> {
-    return [...element.querySelectorAll('button')]
-        .find(btn => btn.textContent.trim() === text);
+export const getButtonByText = (element, text) => {
+  return [...element.querySelectorAll('button')]
+    .find(btn => btn.textContent.trim() === text);
+}
+
+export const buscarButton = (e) => {
+  const btn = e.evento.closest("button");
+
+  // Verificamos si el clic ocurrió dentro de un botón en el tbody
+  if (btn && e.tbody.contains(btn)) {
+    if (btn.classList.contains(e.clasesButton[0])) {
+      console.log("Editar");
+    } else if (btn.classList.contains(e.clasesButton[1])) {
+      console.log("Eliminar");
+    }
+  }
 }
