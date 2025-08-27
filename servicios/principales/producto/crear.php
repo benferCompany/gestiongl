@@ -27,7 +27,7 @@ if (!isset($data['id_producto'], $data['costo'])) {
 
 try {
     $stmt = $pdo->prepare("
-        INSERT INTO producto (id_producto, descripcion, costo, pvp) 
+        INSERT INTO Producto (id_producto, descripcion, costo, pvp) 
         VALUES (:id_producto, :descripcion, :costo, :pvp)
     ");
 

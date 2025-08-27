@@ -54,7 +54,7 @@ try {
         exit;
     }
 
-    $sql = "UPDATE producto SET " . implode(", ", $fields) . " WHERE id_producto = :id_producto";
+    $sql = "UPDATE Producto SET " . implode(", ", $fields) . " WHERE id_producto = :id_producto";
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
 

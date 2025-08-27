@@ -25,7 +25,7 @@ if (!isset($data['id_producto'])) {
 }
 
 try {
-    $stmt = $pdo->prepare("DELETE FROM producto WHERE id_producto = :id_producto");
+    $stmt = $pdo->prepare("DELETE FROM Producto WHERE id_producto = :id_producto");
     $stmt->execute([":id_producto" => $data['id_producto']]);
 
     if ($stmt->rowCount() > 0) {

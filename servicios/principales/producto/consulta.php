@@ -7,7 +7,7 @@ include "../../conexion.php";
 
 try {
     // Consulta SQL con LIMIT
-    $sql = "SELECT * FROM producto LIMIT 10";
+    $sql = "SELECT * FROM Producto LIMIT 10";
 
     // Preparar y ejecutar
     $stmt = $pdo->prepare($sql);
