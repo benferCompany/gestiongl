@@ -95,11 +95,33 @@ export const buscarButton = (e) => {
   // Verificamos si el clic ocurrió dentro de un botón en el tbody
   if (btn && e.tbody.contains(btn)) {
     if (btn.classList.contains(e.clasesButton[0])) {
-      
+
       e.accionEditar(btn);
     } else if (btn.classList.contains(e.clasesButton[1])) {
- 
+
       e.accionEliminar(btn);
     }
   }
+}
+
+
+
+//evento button
+let ultimoPresionado = null
+export const eventoButton = (parametro) => {
+  
+  
+  const button = document.createElement("button");
+  button.addEventListener("click", (e) => {
+    console.log(e.target.innerText)
+    if (e.target.innerText == ultimoPresionado){return} ;
+    ultimoPresionado = e.target.innerText;
+    
+    parametro.evento();
+
+  })
+  button.innerText = parametro.nombre;
+  
+
+  return button;
 }

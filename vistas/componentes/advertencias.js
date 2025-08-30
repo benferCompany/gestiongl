@@ -1,31 +1,22 @@
-import {fondoOscuro} from "../../vistas/componentes/fondoOscuro.js";
-export const advertencias = ()=>{
+import { eliminarDatosPorId } from "../../controladores/hooks.js";
+import { consultarProducto } from "../../controladores/principales/producto/consulta.js";
+import { URL } from "../../controladores/url/url.js";
+import { fondoOscuro } from "../../vistas/componentes/fondoOscuro.js";
+export const advertencias = (param) => {
     const div = document.createElement("div");
-    div.classList.add("advertencias");
-    div.innerHTML=`
-    <style>
-    .advertencias{
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.82);
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        position: fixed;
-        top: 0;
-        display: flex;
-        }
-    .div-alert{
+    div.style =` 
         padding: 1rem;
         width: 490px;
         height: 130px;
-        background: rgba(255, 0, 0, 0.22);
+        background: rgba(100, 12, 12, 0.84);
         border-radius: 10px;
         border: 4px solid red;
         box-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
-        animation: parpadeo-borde 1s infinite;
-        }
-        
+        animation: parpadeo-borde 1s infinite;`
+    div.classList.add("advertencias");
+    div.innerHTML = `
+    <style>
+  
     @keyframes parpadeo-borde {
       0%   { border-color: red; }
       50%  { border-color: transparent; }
@@ -53,7 +44,7 @@ export const advertencias = ()=>{
     background-color: rgba(0, 145, 255, 0.53);
     }
     </style>
-    <div class="div-alert"><h1>⚠️¿Estas seguro de eliminar este producto?⚠️</h1>
+    <div class="div-alert"><h1>⚠️${param.mensaje}⚠️</h1>
         <div style="display: flex;justify-content: space-around; margin-top: 2rem;">
             <button id="btnCancelar">Cancelar</button>
             <button id="btnEliminar">Eliminar</button>
@@ -61,6 +52,18 @@ export const advertencias = ()=>{
     </div>
     `;
 
+    const btnCancelar = div.querySelector("#btnCancelar");
+    const btnEliminar = div.querySelector("#btnEliminar");
+
+    btnCancelar.addEventListener("click", () => {
+        div.parentNode.remove()
+    });
+    btnEliminar.addEventListener("click", async function () {        
+        param.action(param.id);
+        div.parentNode.remove()
+    })
     return fondoOscuro(div);
-    
+
 }
+
+

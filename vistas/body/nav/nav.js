@@ -5,12 +5,28 @@ const style = `
             padding: 0;
             margin: 0;
             }
-        nav {
-            padding: 1rem;
-            display: flex;
+        nav{
+            
+        }
+        #navegadores {
+            display:flex;
             justify-content: space-around;
+            padding: 1rem;
             background-color: #0f0f0fff;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.48);
+            
+        }
+        #subNavegadores{
+            background:orange;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.48);
+        }
+        #subNavegadores button {
+        background-color: rgba(0, 0, 0, 1);
+            color:whitesmoke;
+            cursor: pointer;
+            border: 1px solid whitesmoke;
+            padding: 10px;
+            border-radius: 5px;
         }
         button {
             background-color: rgba(240, 133, 33, 1);
@@ -24,13 +40,19 @@ const style = `
 
 export const nav = function () {
     const nav = document.createElement("nav");
+    nav.id = "nav"
     nav.innerHTML = `
         ${style}
-        <button>Ventas</button>
-        <button>Compras</button>
-        <button id ="idNavButtonProducto">Producto</button>
-        <button>Balances</button>
-        <button>Clientes</button>
+        <div id="navegadores">
+        
+            <button>FACTURA</button>
+            <button>INVENTARIO</button>
+            <button id ="idNavButtonProducto">Producto</button>
+            <button>PERSONAS</button>
+            <button>BALANCES</button>
+        
+        </div>
+        <div id="subNavegadores"></div>
     `;
     return nav;
 }
