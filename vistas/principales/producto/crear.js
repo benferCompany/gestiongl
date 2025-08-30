@@ -7,6 +7,7 @@ import { submitCrearProd } from "../../../controladores/principales/producto/cre
 import { editarProducto } from "../../../controladores/principales/producto/editarControlador.js";
 import { eliminarProducto } from "../../../controladores/principales/producto/eliminarControlador.js";
 
+
 export const crear = () => {
     const divPadre = document.createElement("div");
     divPadre.style.cssText = `
@@ -29,7 +30,6 @@ export const crear = () => {
             clasesButton:["btnEditar","btnEliminar"],
             accionEditar: editarProducto,
             accionEliminar:eliminarProducto
-
         }
     
         
@@ -42,6 +42,9 @@ export const crear = () => {
         consultarProducto(tbody);
 
     })
+
+
+
 
     divPadre.appendChild(formularioFragment);
     divPadre.appendChild(tableFragment)

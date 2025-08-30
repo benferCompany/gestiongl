@@ -3,10 +3,7 @@ import { consulta } from "./hooks.js";
 
 
 window.addEventListener("DOMContentLoaded", async () => {
-
     navControlador(document.querySelector("nav"))
-
-
 })
 
 
