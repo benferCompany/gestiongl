@@ -1,9 +1,9 @@
 import { enviarFormularioEditar } from "../../../controladores/principales/producto/editarControlador.js";
 
 export const editProd = async function(producto) {
+    
     const form = document.createElement("form");
     form.innerHTML = `
-
         <label for="">id Producto</label><br>
         <input value="${producto.id_producto}" type="text" name="id_producto"  required><br><br>
         <label for="">Descripción</label><br>
@@ -23,7 +23,6 @@ export const editProd = async function(producto) {
 
     // Agrega el formulario al DOM
     document.body.appendChild(form);
-
 }
 
 
