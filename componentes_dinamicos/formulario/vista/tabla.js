@@ -1,5 +1,5 @@
 
-import { formBuscarPorPalabraCss, tablaCss } from "../../../../vistas/styles/formulario.js";
+import { formBuscarPorPalabraCss, tablaCss } from "../../../vistas/styles/formulario.js";
 import { consulta } from "../../../controladores/hooks.js";
 import { loading } from "../../../vistas/componentes/loading.js";
 import { buscarDatosPorTexto } from "../controlador/buscar.js";

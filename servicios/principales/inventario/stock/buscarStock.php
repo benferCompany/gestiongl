@@ -2,7 +2,7 @@
 header("Content-Type: application/json; charset=UTF-8");
 
 // Incluir conexión
-include "../../conexion.php";  // ajustá la ruta según tu proyecto
+include "../../../conexion.php";  // ajustá la ruta según tu proyecto
 
 // Recibir búsqueda
 $data = json_decode(file_get_contents("php://input"), true);

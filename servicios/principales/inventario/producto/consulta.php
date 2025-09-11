@@ -3,7 +3,7 @@
 header("Content-Type: application/json; charset=UTF-8");
 
 // Incluir la conexión
-include "../../conexion.php";
+include "../../../conexion.php";
 
 try {
     // Consulta SQL con LIMIT

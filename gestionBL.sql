@@ -99,22 +99,18 @@
 
     CREATE TABLE Stock(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        id_producto INT NOT NULL,
+        producto_id INT NOT NULL,
+        proveedor_id INT NOT NULL,
         id_producto_proveedor VARCHAR(50) NULL,
         stock_min DECIMAL(10,2) NOT NULL,
         stock DECIMAL(10,2) NOT NULL,
         stock_max DECIMAL(10,2) NOT NULL,
 
-        FOREIGN KEY (id_producto) REFERENCES Producto(id)
+        FOREIGN KEY (producto_id) REFERENCES Producto(id),
+        FOREIGN KEY (proveedor_id) REFERENCES Proveedor(id)
     );
 
-    CREATE TABLE Stock_Proveedor(
-        id_proveedor INT NOT NULL,
-        id_stock INT NOT NULL,
 
-        FOREIGN KEY(id_proveedor) REFERENCES Proveedor(id),
-        FOREIGN KEY(id_stock) REFERENCES Stock(id)
-    );
 
 
 

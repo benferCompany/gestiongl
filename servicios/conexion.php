@@ -7,6 +7,7 @@ $dbname = "defaultdb";
 $username = "lauty";
 $password = "root";
 */
+
 $host = "localhost";
 $port = 3306; 
 $dbname = "gestionbl";

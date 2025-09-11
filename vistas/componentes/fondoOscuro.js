@@ -1,7 +1,7 @@
 
 
 export const fondoOscuro = (contenido) => {
-
+    
     const div = document.createElement("div");
     div.id = "fondoOscuro"
     div.style = `width: 100%;
@@ -14,8 +14,9 @@ export const fondoOscuro = (contenido) => {
         text-align: center;
         position: fixed;
         display: flex;
+        overflow: auto;
     `
-
+    contenido.style = "margin-top: 20em;"
     div.appendChild(contenido);
     return div;
 }

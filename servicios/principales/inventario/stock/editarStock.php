@@ -2,14 +2,14 @@
 /*
 Editar stock:
 id (obligatorio),
-id_producto (opcional),
+producto_id (opcional),
 id_producto_proveedor (opcional, VARCHAR),
 stock (opcional),
 stock_min (opcional),
 stock_max (opcional)
 */
 header("Content-Type: application/json; charset=UTF-8");
-include "../../conexion.php";
+include "../../../conexion.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 if (!$data) $data = $_POST;
@@ -27,9 +27,9 @@ try {
     $fields = [];
     $params = [":id" => $data['id']];
 
-    if (isset($data['id_producto'])) {
-        $fields[] = "id_producto = :id_producto";
-        $params[":id_producto"] = $data['id_producto'];
+    if (isset($data['producto_id'])) {
+        $fields[] = "producto_id = :producto_id";
+        $params[":producto_id"] = $data['producto_id'];
     }
     if (isset($data['id_producto_proveedor'])) {
         $fields[] = "id_producto_proveedor = :id_producto_proveedor";

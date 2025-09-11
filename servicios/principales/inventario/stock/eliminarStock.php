@@ -4,7 +4,7 @@ Eliminar stock:
 id (obligatorio)
 */
 header("Content-Type: application/json; charset=UTF-8");
-include "../../conexion.php";
+include "../../../conexion.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 if (!$data) $data = $_POST;

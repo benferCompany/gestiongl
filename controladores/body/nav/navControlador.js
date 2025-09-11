@@ -2,7 +2,8 @@
 import { subNavegador } from "../../../vistas/body/nav/subnav/subNav.js";
 import { contenidoCliente } from "../../../vistas/principales/Personas/Cliente/contenidoCliente.js";
 import { contenidoProveedor } from "../../../vistas/principales/Personas/Proveedor/contenidoProveedor.js";
-import { contenidoProducto } from "../../../vistas/principales/producto/contenidoProducto.js";
+import { contenidoProducto } from "../../../vistas/principales/inventario/producto/contenidoProducto.js";
+import { contenidoStock } from "../../../vistas/principales/inventario/stock/contenidoStock.js";
 import { eventoButton, getButtonByText } from "../../hooks.js";
 
 
@@ -21,8 +22,16 @@ export const navControlador = (nav) => {
                 nombre: "Producto"
             }
 
+            const stock = {
+                evento: () => {
+                    contenido.innerHTML = ""
+                   contenidoStock();
+                },
+                nombre: "Stock"
+            }
+
             const param = {
-                botonesNombre: [eventoButton(parametro)]
+                botonesNombre: [eventoButton(parametro), eventoButton(stock)]
 
             }
 

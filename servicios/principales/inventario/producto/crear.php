@@ -7,7 +7,7 @@ id_producto, descripcion, costo, pvp
 header("Content-Type: application/json; charset=UTF-8");
 
 // Incluir conexión
-include "../../conexion.php";  // ajustá la ruta según dónde esté tu archivo
+include "../../../conexion.php";  // ajustá la ruta según dónde esté tu archivo
 
 // Recibir datos enviados por POST (JSON o form-data)
 $data = json_decode(file_get_contents("php://input"), true);
