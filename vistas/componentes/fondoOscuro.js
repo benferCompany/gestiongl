@@ -3,7 +3,7 @@
 export const fondoOscuro = (contenido) => {
 
     const div = document.createElement("div");
-    
+    div.id = "fondoOscuro"
     div.style = `width: 100%;
         height: 100%;
         background: rgba(0,0,0,0.5);

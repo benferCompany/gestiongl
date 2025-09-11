@@ -44,7 +44,7 @@ try {
     echo json_encode([
         "status"  => "success",
         "message" => "Producto creado correctamente",
-        "producto" => [
+        "data" => [
             "id"          => $producto_id,
             "id_producto" => $data['id_producto'],
             "descripcion" => $data['descripcion'] ?? null,

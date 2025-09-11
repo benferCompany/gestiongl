@@ -62,7 +62,7 @@ try {
         echo json_encode([
             "status" => "success",
             "message" => "Producto actualizado correctamente",
-            "producto" => $data
+            "data" => $data
         ]);
     } else {
         echo json_encode([

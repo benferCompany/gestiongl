@@ -1,10 +1,7 @@
-import { eliminarDatosPorId } from "../../controladores/hooks.js";
-import { consultarProducto } from "../../controladores/principales/producto/consulta.js";
-import { URL } from "../../controladores/url/url.js";
 import { fondoOscuro } from "../../vistas/componentes/fondoOscuro.js";
 export const advertencias = (param) => {
     const div = document.createElement("div");
-    div.style =` 
+    div.style = ` 
         padding: 1rem;
         width: 490px;
         height: 130px;
@@ -55,12 +52,15 @@ export const advertencias = (param) => {
     const btnCancelar = div.querySelector("#btnCancelar");
     const btnEliminar = div.querySelector("#btnEliminar");
 
-    btnCancelar.addEventListener("click", () => {
-        div.parentNode.remove()
+    btnCancelar.addEventListener("click", async () => {
+        div.parentNode.remove();
     });
-    btnEliminar.addEventListener("click", async function () {        
-        param.action(param.id);
+    btnEliminar.addEventListener("click", async function (e) {
+
+
+        param.action(param.id); // primero ejecuta la acción
         div.parentNode.remove()
+
     })
     return fondoOscuro(div);
 

@@ -40,7 +40,7 @@ try {
     echo json_encode([
         "status"  => "success",
         "message" => "Cliente creado correctamente",
-        "cliente" => [
+        "data" => [
             "id"        => $cliente_id,
             "nombre"    => $data['nombre'],
             "apellido"  => $data['apellido'],

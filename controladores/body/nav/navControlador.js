@@ -1,9 +1,9 @@
 
 import { subNavegador } from "../../../vistas/body/nav/subnav/subNav.js";
-import { crear } from "../../../vistas/principales/producto/crear.js";
+import { contenidoCliente } from "../../../vistas/principales/Personas/Cliente/contenidoCliente.js";
+import { contenidoProveedor } from "../../../vistas/principales/Personas/Proveedor/contenidoProveedor.js";
+import { contenidoProducto } from "../../../vistas/principales/producto/contenidoProducto.js";
 import { eventoButton, getButtonByText } from "../../hooks.js";
-import { crearCliente } from "../../../vistas/principales/Personas/Cliente/crearClient.js";
-import { tablaClient } from "../../../vistas/principales/Personas/Cliente/mostrarClient.js";
 
 
 
@@ -16,7 +16,7 @@ export const navControlador = (nav) => {
             const parametro = {
                 evento: () => {
                     contenido.innerHTML = ""
-                    contenido.append(crear())
+                   contenidoProducto();
                 },
                 nombre: "Producto"
             }
@@ -31,17 +31,26 @@ export const navControlador = (nav) => {
         }
         if (e.target == getButtonByText(nav, "PERSONAS")) {
 
-            const parametro = {
+            const cliente = {
                 evento: () => {
                     contenido.innerHTML = ""
-                    contenido.append(crearCliente())
-                    contenido.append(tablaClient())
+                    contenidoCliente();
                 },
                 nombre: "Cliente"
             }
 
+            const proveedor = {
+                evento: () => {
+                    contenido.innerHTML = ""
+
+
+                    contenidoProveedor(contenido);
+                },
+                nombre: "Proveedor"
+            }
+
             const param = {
-                botonesNombre: [eventoButton(parametro)]
+                botonesNombre: [eventoButton(cliente), eventoButton(proveedor)]
 
             }
 
