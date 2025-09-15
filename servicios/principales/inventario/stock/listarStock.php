@@ -17,9 +17,9 @@ try {
         s.stock,
         s.stock_min,
         s.stock_max
-        FROM stock s
-        INNER JOIN producto prod   ON s.producto_id = prod.id
-        INNER JOIN proveedor prov  ON s.proveedor_id = prov.id
+        FROM Stock s
+        INNER JOIN Producto prod   ON s.producto_id = prod.id
+        INNER JOIN Proveedor prov  ON s.proveedor_id = prov.id
         ORDER BY s.id DESC;";
     
     $stmt = $pdo->query($sql);

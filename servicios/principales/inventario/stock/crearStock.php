@@ -26,7 +26,7 @@ foreach ($required as $field) {
 }
 
 try {
-    $sql = "INSERT INTO stock (id_producto, id_producto_proveedor, stock, stock_min, stock_max) 
+    $sql = "INSERT INTO Stock (id_producto, id_producto_proveedor, stock, stock_min, stock_max) 
             VALUES (:id_producto, :id_producto_proveedor, :stock, :stock_min, :stock_max)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([

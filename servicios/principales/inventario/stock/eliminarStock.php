@@ -19,7 +19,7 @@ if (!isset($data['id'])) {
 }
 
 try {
-    $sql = "DELETE FROM stock WHERE id = :id";
+    $sql = "DELETE FROM Stock WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([":id" => $data['id']]);
 

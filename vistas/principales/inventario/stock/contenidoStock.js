@@ -6,10 +6,10 @@ import { URL } from "../../../../controladores/url/url.js";
 const json = {
     content: [
         { header: "Id", name: "id" },
-        { header: "Producto Id", name: "producto_id" },
-        { header: "Proveedor Id", name: "proveedor_id" },
+        { header: "Producto Id", name: "producto_id", type: "text", tipo:"select", accion:"buscarProducto", llaveMostrar:"descripcion"},
+        { header: "Proveedor Id", name: "proveedor_id", type: "text", tipo:"select", accion:"buscarProveedor", llaveMostrar:"razon_social" },
         { header: "Razón Social", name: "razon_social" },
-        { header: "Id del producto", name: "id_producto" },
+        { header: "Id del producto", name: "id_producto", },
         { header: "Descripción", name: "descripcion" },
         { header: "Id del proveedor", name: "id_producto_proveedor" },
         { header: "Stock", name: "stock" },
@@ -26,7 +26,9 @@ const json = {
         crear: URL + "/servicios/principales/inventario/stock/crearStock.php",
         mostrar: URL + "/servicios/principales/inventario/stock/listarStock.php",
         eliminar: URL + "/servicios/principales/inventario/stock/eliminarStock.php",
-        buscar: URL + "/servicios/principales/inventario/stock/buscarStock.php"
+        buscar: URL + "/servicios/principales/inventario/stock/buscarStock.php",
+        buscarProveedor: URL + "/servicios/principales/proveedor/buscarProveedor.php",
+        buscarProducto: URL + "/servicios/principales/inventario/producto/buscar.php"
     },
     contenido: document.getElementById("contenido"),
     texto: "",
@@ -36,5 +38,5 @@ const json = {
 }
 
 export const contenidoStock = () => {
-     contenido(json)
+    contenido(json)
 }

@@ -57,7 +57,7 @@ try {
         exit;
     }
 
-    $sql = "UPDATE stock SET " . implode(", ", $fields) . " WHERE id = :id";
+    $sql = "UPDATE Stock SET " . implode(", ", $fields) . " WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
 
