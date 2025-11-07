@@ -28,26 +28,6 @@ export const obtenerTbody = async (json) => {
 }
 
 
-const consulta = async (URL) => {
-    try {
-
-        const response = await fetch(URL);
-        const json = await response.json();
-
-
-        if (json.status == "success") {
-
-            return json;
-        } else {
-            console.error(json.message);
-        }
-
-
-    } catch (error) {
-        console.error(error);
-    }
-}
-
 
 export const eventoBotones = (e, json) => {
     const button = e.target.closest("button");

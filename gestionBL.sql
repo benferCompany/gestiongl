@@ -47,6 +47,7 @@
         id_producto INT NOT NULL,
         descripcion VARCHAR(255) NOT NULL,
         costo DECIMAL(10,2) NOT NULL,
+        cantidad DECIMAL(10,2) NOT NULL,
         descuento DECIMAL(10,2) NOT NULL,
 
         FOREIGN KEY (id_factura_compra) REFERENCES FacturaCompra(id),
@@ -71,6 +72,7 @@
         id_factura_venta INT NOT NULL,
         id_producto INT NOT NULL,
         descripcion VARCHAR(255) NOT NULL,
+        cantidad DECIMAL(10,2) NOT NULL,
         pvp DECIMAL(10,2) NOT NULL,
         descuento DECIMAL(10,2) NOT NULL,
 

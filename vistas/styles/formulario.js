@@ -1,5 +1,5 @@
-export const formularioCss = (formulario)=>{
-    return `<style>
+export const formularioCss = (formulario) => {
+  return `<style>
        ${formulario} {
             all:unset;
             display: flex;
@@ -63,8 +63,8 @@ export const formularioCss = (formulario)=>{
 }
 
 
-export const padreFormularioCss = ()=>{
-    return  `
+export const padreFormularioCss = () => {
+  return `
             display: flex;             /* activa Flexbox */
             padding: 1em;
             aling-items: center;
@@ -75,8 +75,8 @@ export const padreFormularioCss = ()=>{
 
 }
 
-export const tablaCss = ()=> {
-    const style = ` <style>
+export const tablaCss = () => {
+  const style = ` <style>
 
       table{
         margin-top: 0px;
@@ -133,11 +133,11 @@ export const tablaCss = ()=> {
       }
         </style>
 `
-    return style
+  return style
 }
 
-export const formBuscarPorPalabraCss =()=>{
-  
+export const formBuscarPorPalabraCss = () => {
+
   return `
     <style>
         #formSearchId {
@@ -176,4 +176,40 @@ export const formBuscarPorPalabraCss =()=>{
         }
     </style>
    `
+}
+
+export const formularioSelectCss = () => {
+  return ` 
+    .divSelect{
+          width:100%;
+          background: black;
+          color:whitesmoke;
+      }
+      .divSelect input {
+          width:100%;
+          color:whitesmoke;
+          background: transparent;
+          border-top: none;
+          border-left: none;
+          border-right:none;
+          border-bottom: 1px solid white;
+          transition: 0.3s;
+          }
+      .divSelect input:hover{
+            color:whitesmoke;
+            height: 25px;
+            background:  rgba(240, 133, 33, 0.16);;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom: 1px solid white;
+        }
+
+      ul{
+        color: whitesmoke; 
+        list-style: none;
+      }
+
+
+        `
 }

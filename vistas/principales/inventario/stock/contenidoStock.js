@@ -5,16 +5,16 @@ import { URL } from "../../../../controladores/url/url.js";
 
 const json = {
     content: [
-        { header: "Id", name: "id" },
+        { header: "Id", name: "id", type:"number" },
         { header: "Producto Id", name: "producto_id", type: "text", tipo:"select", accion:"buscarProducto", llaveMostrar:"descripcion"},
         { header: "Proveedor Id", name: "proveedor_id", type: "text", tipo:"select", accion:"buscarProveedor", llaveMostrar:"razon_social" },
-        { header: "Razón Social", name: "razon_social" },
-        { header: "Id del producto", name: "id_producto", },
-        { header: "Descripción", name: "descripcion" },
-        { header: "Id del proveedor", name: "id_producto_proveedor" },
-        { header: "Stock", name: "stock" },
-        { header: "Stock Min", name: "stock_min" },
-        { header: "Stock Max", name: "stock_max" }
+        { header: "Razón Social", name: "razon_social", type: "text" },
+        { header: "Id del producto", name: "id_producto", type: "number" },
+        { header: "Descripción", name: "descripcion", type: "text"},
+        { header: "Id del proveedor", name: "id_producto_proveedor", type: "number" },
+        { header: "Stock", name: "stock", type: "number"},
+        { header: "Stock Min", name: "stock_min",type: "number"},
+        { header: "Stock Max", name: "stock_max" ,type: "number"}
 
     ],
 

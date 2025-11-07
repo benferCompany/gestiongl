@@ -14,7 +14,7 @@ export const contenido = async (json) => {
     `
    
  
-    console.log()
+    
     
     div.append(formulario(json))
     div.append(await table(json))

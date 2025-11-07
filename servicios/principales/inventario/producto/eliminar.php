@@ -1,7 +1,7 @@
 <?php
 /*
 Eliminar producto:
-id_producto (obligatorio)
+id (obligatorio)
 */
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -15,24 +15,24 @@ if (!$data) {
 }
 
 // Validación de campo requerido
-if (!isset($data['id_producto'])) {
+if (!isset($data['id'])) {
     http_response_code(400);
     echo json_encode([
         "status" => "error",
-        "message" => "Falta el campo obligatorio: id_producto"
+        "message" => "Falta el campo obligatorio: id"
     ]);
     exit;
 }
 
 try {
-    $stmt = $pdo->prepare("DELETE FROM Producto WHERE id_producto = :id_producto");
-    $stmt->execute([":id_producto" => $data['id_producto']]);
+    $stmt = $pdo->prepare("DELETE FROM Producto WHERE id = :id");
+    $stmt->execute([":id" => $data['id']]);
 
     if ($stmt->rowCount() > 0) {
         echo json_encode([
             "status" => "success",
             "message" => "Producto eliminado correctamente",
-            "id_producto" => $data['id_producto']
+            "id" => $data['id']
         ]);
     } else {
         echo json_encode([

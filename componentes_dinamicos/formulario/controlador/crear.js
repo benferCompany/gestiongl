@@ -32,7 +32,6 @@ export const crear = async (e) => {
             const table = objeto.contenido.querySelector("table");
             objeto.data.data.push(responseJson.data);
             const tbody = await obtenerTbody(objeto);
-            console.log(tbody)
             table.querySelector("tbody").replaceWith(tbody)
             
             param.background = "green";

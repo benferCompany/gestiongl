@@ -5,12 +5,12 @@ import { eventoSubmit } from "../../../../componentes_dinamicos/formulario/contr
 import { URL } from "../../../../controladores/url/url.js"
 const json = {
     content: [
-        { header: "Id", name: "id" },
-        { header: "Nombre de contacto", name: "nombre_contacto" },
-        { header: "Dirección", name: "direccion" },
-        { header: "Razón Social", name: "razon_social" },
-        { header: "CUIT", name: "cuit" },
-        { header: "Teléfono", name: "telefono" }
+        { header: "Id", name: "id", type: "number" },
+        { header: "Nombre de contacto", name: "nombre_contacto", type: "text" },
+        { header: "Dirección", name: "direccion", type: "text" },
+        { header: "Razón Social", name: "razon_social", type: "text" },
+        { header: "CUIT", name: "cuit", type: "text" },
+        { header: "Teléfono", name: "telefono", type: "text" }
     ],
 
     data: {},

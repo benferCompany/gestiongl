@@ -6,12 +6,12 @@ import { URL } from "../../../../controladores/url/url.js";
 
 const json = {
     content: [
-        { header: "Id", name: "id" },
-        { header: "Nombre", name: "nombre" },
-        { header: "Apellido", name: "apellido" },
-        { header: "CUIT", name: "cuit" },
-        { header: "Dirección", name: "direccion" },
-        { header: "Teléfono", name: "telefono" }
+        { header: "Id", name: "id", type: "number" },
+        { header: "Nombre", name: "nombre", type: "text" },
+        { header: "Apellido", name: "apellido", type: "text" },
+        { header: "CUIT", name: "cuit", type: "text" },
+        { header: "Dirección", name: "direccion", type: "text" },
+        { header: "Teléfono", name: "telefono", type: "text" }
     ],
 
     data: {},

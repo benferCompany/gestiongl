@@ -20,7 +20,6 @@ export const table = async (json) => {
   if (divTable.querySelector("table").querySelector("tbody")) {
     divTable.querySelector("table").querySelector("tbody").remove();
   }
-  console.log(json)
   divTable.querySelector("table").append(await obtenerTbody(json))
   loading(false)
 

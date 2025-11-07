@@ -1,5 +1,4 @@
 export const trAJson = (tr, json) => {
-    console.log(json)
     const tds = tr.querySelectorAll("td:not(.td-btn)");
     return json.content.map((col, i) => ({
         header: col.header,
@@ -9,4 +8,15 @@ export const trAJson = (tr, json) => {
     }));
 
 
+}
+
+
+
+
+export function debounce(fn, delay) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+    };
 }

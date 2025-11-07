@@ -47,7 +47,6 @@ export const nav = function () {
         
             <button>FACTURA</button>
             <button>INVENTARIO</button>
-            <button id ="idNavButtonProducto">Producto</button>
             <button>PERSONAS</button>
             <button>BALANCES</button>
         

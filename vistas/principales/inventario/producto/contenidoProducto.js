@@ -5,11 +5,11 @@ import { URL } from "../../../../controladores/url/url.js";
 
 const json = {
     content: [
-        { header: "Id", name: "id" },
-        { header: "Id de Producto", name: "id_producto" },
-        { header: "Descripción", name: "descripcion" },
-        { header: "Costo", name: "costo" },
-        { header: "PVP", name: "pvp" }
+        { header: "Id", name: "id", type: "text" },
+        { header: "Id de Producto", name: "id_producto", type: "text" },
+        { header: "Descripción", name: "descripcion", type: "text" },
+        { header: "Costo", name: "costo", type: "number" },
+        { header: "PVP", name: "pvp", type: "number" }
 
     ],
 
@@ -23,6 +23,13 @@ const json = {
         eliminar: URL + "/servicios/principales/inventario/producto/eliminar.php",
         buscar: URL + "/servicios/principales/inventario/producto/buscar.php"
     },
+    mensajes: {
+        eliminar:"¿Estas seguro que quieres eliminar este producto?",
+        editar:"El producto se edito con éxito",
+        crear: "El producto se creó con éxito",
+
+    },
+
     contenido: document.getElementById("contenido"),
     texto: "",
     eventos: { editar: eventoSubmit, crear: crearFormulario }

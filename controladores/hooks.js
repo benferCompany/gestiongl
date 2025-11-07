@@ -159,7 +159,7 @@ export const eventoButton = (parametro) => {
 }
 
 export const llenarFormulario = (form, datosCliente) => {
-  
+
   const inputId = document.createElement("input");
   inputId.type = "hidden";
   inputId.name = "id";   // nombre del campo que recibís en backend
@@ -204,3 +204,20 @@ export const trEnJson = (tr) => {
 
 
 
+export function observarCambios(elemento, metodo) {
+  // Creamos el observador
+  const observer = new MutationObserver((mutations) => {
+    // Por cada cambio detectado, llamamos al método que nos pasaron
+    mutations.forEach(mutation => metodo(mutation));
+  });
+
+  // Configuramos qué tipo de cambios observar
+  observer.observe(elemento, {
+    childList: true,       // hijos agregados o eliminados
+    attributes: true,      // cambios en atributos
+    subtree: true,         // incluir los nodos hijos
+    characterData: true
+  });
+
+  return observer;
+}

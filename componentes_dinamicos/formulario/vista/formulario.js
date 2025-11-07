@@ -10,7 +10,6 @@ export const formulario = (parametros) => {
     let content = parametros.content
     let evento = parametros.eventos.editar;
     const booleanForm = parametros.content.some(obj => "value" in obj);
-    console.log(booleanForm)
     if (booleanForm) {
 
     } else {
@@ -43,7 +42,6 @@ export const formulario = (parametros) => {
 
     console.log(content)
     inputs.forEach(async i => {
-        console.log(i.dataset.tipo)
         if (i.dataset.tipo == "select") {
             parametros.llaveDescripcion = i.name
             parametros.contentSelect = i

@@ -1,3 +1,4 @@
+import { formularioSelectCss } from "../../../vistas/styles/formulario.js";
 
 
 
@@ -12,7 +13,6 @@ export const select = async (parametros) => {
         valueId: "id",
     }
 
-    console.log(parametros)
     param.llaveDescripcion = parametros.llaveDescripcion;
     param.llaveMostrar = parametros.llaveMostrar;
     param.URL = parametros.URLBuscar;
@@ -31,18 +31,8 @@ export const select = async (parametros) => {
     param.div.append(param.input)
     param.div.append(param.ul);
     const style = document.createElement("style");
-    style.innerHTML = `
-    .divSelect{
-        width:100%;
-        background:white;
-        color:black;
-    }
-    .divSelect input {
-        width:100%;
-    }
-                    `
+    style.innerHTML = formularioSelectCss();
     param.div.append(style)
-    console.log(parametros.contentSelect)
     parametros.contentSelect.replaceWith(param.div);
 
 
@@ -80,7 +70,7 @@ function debounce(fn, delay) {
 
 
 const eventoKeyUp = debounce(async (e, param) => {
-    param.input.style.background = "white";
+   
     if (!e.target.value.trim()) {
         param.ul.innerHTML = "";
         return;
@@ -103,7 +93,6 @@ const eventoKeyUp = debounce(async (e, param) => {
                 inputSelect.value = element[param.llaveMostrar];
                 
                 inputSelect.id = element[param.valueId];
-                inputSelect.style = "background:green";
                 param.ul.innerHTML = "";
 
             })

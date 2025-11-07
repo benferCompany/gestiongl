@@ -20,10 +20,9 @@ export const eventoSubmit = async (e) => {
     loading(true);
     e.preventDefault();
     const json = e.target.objeto;
-    console.log(json)
     const datos = new FormData(e.target);
     const url = json.URLS.editar;
-    console.log(e.target)
+    
 
     try {
         const response = await fetch(url, {
@@ -32,7 +31,7 @@ export const eventoSubmit = async (e) => {
         })
         const jsonResponse = await response.json();
         if (jsonResponse.status == "success") {
-            console.log("Se actualizó correctamente")
+           
             const contenido = document.getElementById("contenido")
             json.contenido = contenido;
             json.data = await consulta(json.URLS.mostrar)
