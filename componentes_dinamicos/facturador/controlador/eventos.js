@@ -46,7 +46,6 @@ export function handleSelect(tbody, li) {
 
 
     
-
 }
 
 
