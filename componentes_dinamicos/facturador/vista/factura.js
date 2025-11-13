@@ -1,70 +1,14 @@
-import { URL } from "../../../controladores/url/url.js";
+import { observarCambios } from "../../../controladores/hooks.js";
 import { buttonAgregar } from "../controlador/buttons.js";
-import { handleSelect } from "../controlador/eventos.js";
+import { changeInputs } from "../controlador/eventos.js";
 import { facturaCss } from "../style/cssFactura.js";
 
 
-const param = {
-    inputs: [
-        { type: "text", name: "", id: "", placeholder: "Tipo de factura" },
-        { type: "text", name: "", id: "", placeholder: "Cliente" },
-        { type: "text", name: "", id: "", placeholder: "Tipo de pago" }
-    ],
-    button: [
-        {
-            value: "Agreagar Producto", evento:(e)=>{e.preventDefault()}
-        },
-        {
-            value: "Generar Factura", evento: (e) => {
-                e.preventDefault()
-                console.log(e.target);
-            }
-        }
-    ],
 
-    headers: [
-        {
-            header: "ID",
-            name: "id",
-            type: "number"
-        },
-        {
-            header: "Descripción",
-            name: "descripcion",
-            type: "text"
-        },
-        {
-            header: "Cantidad",
-            name: "cantidad",
-            type: "number"
-        },
-        {
-            header: "PVP",
-            name: "pvp",
-            type: "number"
-        },
-        {
-            header: "Descuento",
-            name: "descuento",
-            type: "number"
-        },
-        {
-            header: "Total",
-            name: "total",
-            type: "number"
-        }
 
-    ],
-    contenidos:{divFactura:null},
-
-    url: URL + "/servicios/principales/inventario/producto/buscar.php",
-    eventos: {handleSelect: handleSelect},
-    llave: "descripcion",
-    body :{}
-}
-
-export const factura = () => {
+export const factura = (param) => {
     const div = document.createElement('div');
+    div.id="formularioFactura"
     div.innerHTML = `
     ${facturaCss()}
     <div class="padre">
@@ -78,7 +22,7 @@ export const factura = () => {
                 
                 <div class="sbt">
                     <b>SubTotal:</b>
-                    <span>$1000</span>
+                    <span>$0</span>
                 </div><br>
 
                 <div class="des">
@@ -86,13 +30,13 @@ export const factura = () => {
                         <b>Descuento:</b>
                         <span><input value="0" type="number"/></span>
                     </div>
-                    <strong style="color: red;">- $100</strong>
+                    <strong style="color: red;">- $0</strong>
                 </div> <br>
                 <div class="resumen">
                     <b>Resumen</b>
                     <div>
                         <strong>TOTAL :</strong>
-                        <span>$1000</span>
+                        <span>$0</span>
                     </div>
 
                 </div> <br><br>
@@ -122,6 +66,12 @@ export const factura = () => {
             </table> <br>
         </div>
     </div>`
+    observarCambios(div.querySelector("table"),()=>{
+       
+        changeInputs(div)
+    })
+   
+    
     param.button[0].evento = (e)=>{ e.preventDefault()
         param.contenidos.divFactura = div 
         buttonAgregar(param)};
@@ -135,20 +85,21 @@ export const factura = () => {
             input.select();
         })        
     })
-
-    div.querySelector(".des")
+    
+     div.querySelector(".des")
         .querySelector("input")
-        .addEventListener("change", (e) => {
+        .addEventListener("change", ()=>{inputFormulario()})
+
+    const inputFormulario = () => {
             const subtotal = parseFloat(div.querySelector(".sbt")
                                             .querySelector("span").innerText.replace("$", ""));
             
-            const descuento = e.target.value;
+            const descuento = div.querySelector(".des").querySelector("input").value;
             const totalDescuento = subtotal * (descuento / 100);
             
-            e.target.closest(".des").querySelector("strong").innerText = `- $${totalDescuento.toFixed(2)}`;
+            div.querySelector(".des").querySelector("strong").innerText = `- $${totalDescuento.toFixed(2)}`;
             const total = subtotal - totalDescuento;
             div.querySelector(".resumen").querySelector("span").innerText = `$${total.toFixed(2)}`;
-        })
-
+        }
     return div;
 } 
