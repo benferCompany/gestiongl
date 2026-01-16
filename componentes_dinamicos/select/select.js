@@ -5,7 +5,7 @@ export const select = (param) => {
     const div = document.createElement("div");
     div.className = "select";
     div.id = "select";
-
+    div.addEventListener("keydown",(e)=>{if(e.key==="Escape") div.parentNode.remove()})
     div.innerHTML = `
         <style>
             .select {
@@ -75,12 +75,14 @@ export const select = (param) => {
             <tbody></tbody>
         </table>
     `;
-
+    const divSpan = div.querySelector(".div-span span");
+    divSpan.addEventListener("click",()=>{
+        div.parentNode.remove();
+    })
     const table = div.querySelector("table");
     const thead = table.querySelector("thead");
     const tbody = table.querySelector("tbody");
     const input = div.querySelector("input");
-
     input.addEventListener(
         "input",
         debounce(async (e) => {
@@ -179,9 +181,18 @@ const selection = (param) => {
 
     /** ✅ Escuchar flechas desde el input o la tabla */
     const manejarTeclas = (e) => {
-        if (!["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) return;
+        if (!["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
+            
+            input.focus()
+            return
+
+        };
+
+
         e.preventDefault();
 
+
+        
         if (filas.length === 0) return;
 
         if (e.key === "ArrowDown") {
@@ -193,7 +204,6 @@ const selection = (param) => {
             param.eventos.handleSelect(contenedor, fila);
             return;
         }
-
         marcarFila(count);
     };
 

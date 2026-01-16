@@ -2,7 +2,7 @@ import { observarCambios } from "../../../controladores/hooks.js";
 import { buttonAgregar } from "../controlador/buttons.js";
 import { changeInputs } from "../controlador/eventos.js";
 import { facturaCss } from "../style/cssFactura.js";
-
+import { jsSelectInputCliente } from "../../select/controlador/jsSelectInput.js";
 
 
 
@@ -13,22 +13,22 @@ export const factura = (param) => {
     ${facturaCss()}
     <div class="padre">
         <div class="form">
-            <form action="">
+            <form>
                
-                ${param.inputs.map(i => `<input type="${i.type}" name="${i.name}" placeholder="${i.placeholder}">`).join("<br><br>")}
+                ${param.inputs.map(i => `<input selector=${i.selector ? "true" : ""} url="${i.url}" type="${i.type}" name="${i.name}" placeholder="${i.placeholder}">`).join("<br><br>")}
                 <div class="btn">
-                    <button class="btn-agregar"> Agregar Producto</button> <br><br>
+                    <button  type="button" class="btn-agregar"> Agregar Producto</button> <br><br>
                 </div>
                 
                 <div class="sbt">
                     <b>SubTotal:</b>
-                    <span>$0</span>
+                    <span class="spanSubTotal">$0</span>
                 </div><br>
 
                 <div class="des">
                     <div >
                         <b>Descuento:</b>
-                        <span><input value="0" type="number"/></span>
+                        <span><input name="descuento" class="inputDes" value="0" type="number"/></span>
                     </div>
                     <strong style="color: red;">- $0</strong>
                 </div> <br>
@@ -36,11 +36,11 @@ export const factura = (param) => {
                     <b>Resumen</b>
                     <div>
                         <strong>TOTAL :</strong>
-                        <span>$0</span>
+                        <span class="spanTotal">$0</span>
                     </div>
 
                 </div> <br><br>
-                <button class="btn-f">Generar Factura</button> <br>
+                <button type="button" class="btn-f">Generar Factura</button> <br>
             </form>
         </div>
 
@@ -71,12 +71,19 @@ export const factura = (param) => {
         changeInputs(div)
     })
    
-    
+    const inputSelector = div.querySelectorAll('input[selector="true"]');
+    inputSelector.forEach(input => {
+        input.addEventListener("input", () => {
+           console.log(input.getAttribute("url"))
+           jsSelectInputCliente(input, input.getAttribute("url"));
+        })
+    });
     param.button[0].evento = (e)=>{ e.preventDefault()
         param.contenidos.divFactura = div 
         buttonAgregar(param)};
     div.querySelectorAll("button").forEach((b, i) => {
-        b.innerHTML = param.button[i].value
+        b.innerHTML = param.button[i].value;
+      
         b.addEventListener("click", param.button[i].evento);
     })
     
@@ -100,6 +107,18 @@ export const factura = (param) => {
             div.querySelector(".des").querySelector("strong").innerText = `- $${totalDescuento.toFixed(2)}`;
             const total = subtotal - totalDescuento;
             div.querySelector(".resumen").querySelector("span").innerText = `$${total.toFixed(2)}`;
+        }    
+    document.body.addEventListener("keydown",(e)=>{
+        if(e.key ==="F2"){
+            if(document.getElementById("fondoOscuro")) return;
+            if(!document.getElementById("contenido").querySelector(".btn-agregar")) return
+            param.button[0].evento(e);
+        }else if(e.key==="F8"){
+            console.log("generar factura")
+            param.button[1].evento(e,div);
         }
+    })
+
+        
     return div;
 } 
