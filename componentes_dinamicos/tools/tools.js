@@ -3,6 +3,9 @@ export const trAJson = (tr, json) => {
     return json.content.map((col, i) => ({
         header: col.header,
         name: col.name,
+        tipo: col.tipo || "",
+        accion: col.accion || "",
+        llaveMostrar: col.llaveMostrar || "",
         value: tds[i]?.innerText.trim() || "",
         type: (col.name === "pvp" || col.name === "costo") ? "number" : "text"
     }));
@@ -21,22 +24,23 @@ export function debounce(fn, delay) {
     };
 }
 
-
 export function tablaAJSON(tabla) {
   const filas = tabla.querySelectorAll("tbody tr");
   const data = [];
 
   filas.forEach(fila => {
     const celdas = fila.querySelectorAll("td");
+    const objeto = {};
 
-    const objeto = {
-      id: celdas[0].textContent.trim(),
-      descripcion: celdas[1].textContent.trim(),
-      cantidad: Number(celdas[2].querySelector("input")?.value || 0),
-      costo: Number(celdas[3].querySelector("input")?.value || 0),
-      descuento: Number(celdas[4].querySelector("input")?.value || 0),
-      total: Number(celdas[5].querySelector("input")?.value || 0)
-    };
+    celdas.forEach(td => {
+      const key = td.dataset.key;
+      if (!key) return;
+
+      const inputEl = td.querySelector("input");
+      const input = inputEl ? inputEl.value : td.innerText;
+      console.log(input);
+      objeto[key] = input;
+    });
 
     data.push(objeto);
   });

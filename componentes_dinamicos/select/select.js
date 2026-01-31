@@ -8,7 +8,7 @@ export const select = (param) => {
     div.addEventListener("keydown",(e)=>{if(e.key==="Escape") div.parentNode.remove()})
     div.innerHTML = `
         <style>
-            .select {
+            #select {
                 width: 50%;
                 height: 250px;
                 border-radius: 5px;
@@ -18,7 +18,7 @@ export const select = (param) => {
                 overflow: hidden;
                 border: 1px solid #ccc;
             }
-            .select input {
+            #select input {
                 all: unset;
                 width: 100%;
                 background: lightgrey;

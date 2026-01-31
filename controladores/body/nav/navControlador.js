@@ -3,6 +3,9 @@ import { subNavegador } from "../../../vistas/body/nav/subnav/subNav.js";
 import { contenidoCliente } from "../../../vistas/principales/Personas/Cliente/contenidoCliente.js";
 import { contenidoProveedor } from "../../../vistas/principales/Personas/Proveedor/contenidoProveedor.js";
 import { contenidoCompra } from "../../../vistas/principales/factura/compra/contenido.js";
+import { getFacturas } from "../../../vistas/principales/factura/facturas/contenido.js";
+import { contenidoVenta } from "../../../vistas/principales/factura/venta/contenido.js";
+
 import { contenidoProducto } from "../../../vistas/principales/inventario/producto/contenidoProducto.js";
 import { contenidoStock } from "../../../vistas/principales/inventario/stock/contenidoStock.js";
 import { eventoButton, getButtonByText } from "../../hooks.js";
@@ -20,12 +23,27 @@ export const navControlador = (nav) => {
                     contenido.innerHTML = ""
                     contenidoCompra();
                 },
-                nombre: "Compra"
+                nombre: "Generar Compra"
             }
 
+            const venta = {
+                evento: () => {
+                    contenido.innerHTML = ""
+                    contenidoVenta();
+                },
+                nombre: "Generar Venta"
+            }
+
+            const facturas = {
+                evento: () => {
+                    contenido.innerHTML = ""
+                    getFacturas();
+                },
+                nombre: "Facturas"
+            }
             
             const param = {
-                botonesNombre: [eventoButton(parametro)]
+                botonesNombre: [eventoButton(parametro), eventoButton(venta), eventoButton(facturas)]
 
             }
 

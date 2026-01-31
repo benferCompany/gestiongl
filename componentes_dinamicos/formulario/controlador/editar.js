@@ -21,6 +21,11 @@ export const eventoSubmit = async (e) => {
     e.preventDefault();
     const json = e.target.objeto;
     const datos = new FormData(e.target);
+    const inputsSelect = e.target.querySelectorAll("input[data-tipo='select']");
+    inputsSelect.forEach(i => {
+        const valor = i.value.split(" ")[0];
+        datos.set(i.name, valor);
+    });
     const url = json.URLS.editar;
     
 

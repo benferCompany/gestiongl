@@ -1,4 +1,4 @@
-export const facturaCss = () => {
+export const facturaCss = (param) => {
     return `<style>
 
         .padre {
@@ -6,10 +6,10 @@ export const facturaCss = () => {
             display: flex;
             justify-content: space-evenly;
             height: 100vh;
-            background-color: rgb(12, 12, 12);
+            background: ${param.backgroundColor ? param.backgroundColor : 'white'};
         }
 
-        .form {
+        .padre .form {
             background-color: rgba(0, 0, 0, 0.988);
             border: none;
             border-radius: 10px;
@@ -23,7 +23,7 @@ export const facturaCss = () => {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        input {
+        .padre input {
             width: 100%;
             height: 50px;
             border-top: none;
@@ -34,13 +34,13 @@ export const facturaCss = () => {
             background-color: transparent;
         }
 
-        .btn {
+        .padre .btn {
             max-width: 100%;
             text-align: end;
             align-items: center;
         }
 
-        .btn button {
+        .padre .btn button {
             all: unset;
             margin-top: 10px;
             height: 40px;
@@ -50,10 +50,10 @@ export const facturaCss = () => {
             background-color: rgb(244, 131, 33);
             cursor: pointer;
         }
-        .tablas {
+        .padre .tablas {
             width: 100%;
         }
-        table {
+        .padre table {
             margin: auto;
             background-color: rgb(27, 27, 27);
             border-radius: 5px;
@@ -62,19 +62,19 @@ export const facturaCss = () => {
 
         }
 
-        thead {
+        .padre thead {
             background-color: rgb(244, 131, 33);
             padding: 1rem;
             color: white;
         }
 
-        th {
+        .padre th {
             text-align: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 5px;
         }
 
-        td {
+        .padre td {
             margin: 0;
             padding: 0;
             padding-left: 5px;
@@ -84,7 +84,7 @@ export const facturaCss = () => {
             align-items: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        td input{
+        .padre td input{
             all: unset;
             width: 100%;
             height: 100%;
@@ -92,36 +92,36 @@ export const facturaCss = () => {
         }
 
 
-        tbody {
+        .padre tbody {
             background-color: whitesmoke;
             color: black;
             cursor: pointer;
             align-items: center;
         }
 
-        tfoot {
+        .padre tfoot {
             text-align: center;
             background-color: whitesmoke;
             color: black;
         }
 
-        .sbt {
+        .padre .sbt {
             width: 100%;
             display: flex;
             justify-content: space-between;
         }
 
-        .resumen {
+        .padre .resumen {
             display: flex;
             max-width: 100%;
             justify-content: space-between;
         }
 
-        span {
+        .padre span {
             margin-left: 5px;
         }
 
-        .btn-f {
+        .padre .btn-f {
             height: 50px;
             border: none;
             cursor: pointer;
@@ -134,7 +134,7 @@ export const facturaCss = () => {
             padding-bottom: 10px;
         }
 
-        #tdAction {
+        .padre #tdAction {
             padding: 0;
             margin: 0;
             color: #FB2C36;
@@ -142,7 +142,7 @@ export const facturaCss = () => {
             background-color: rgba(0, 0, 0, 0.866); 
             transition: 0.4s
         }
-        #tdAction:hover {
+        .padre #tdAction:hover {
             padding: 0;
             margin: 0;
             color: #f61313;
@@ -150,18 +150,18 @@ export const facturaCss = () => {
             background-color: rgb(255, 202, 202); 
         }
 
-        .des {
+        .padre .des {
             width: 100%;
             display: flex;
             justify-content: space-between;
         }
-        .des div{
+        .padre .des div{
             width: 50%;
             display: flex;
             justify-content: space-between;
             
         }
-        .des input{
+        .padre .des input{
             all:unset;
             width:100%;
             color:whitesmoke;

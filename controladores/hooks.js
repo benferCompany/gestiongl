@@ -61,6 +61,38 @@ export const consultaPorTexto = async (param) => {
 };
 
 
+export const guardardarDatos = async (URL, datos) => {
+  try {
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(datos)
+    });
+
+    // Leer siempre la respuesta como JSON
+    const data = await response.json();
+    
+    if (!response.ok) {
+      // Lanzar error con información del servidor
+      throw new Error(data?.message || `Error HTTP ${response.status}`);
+    }
+    console.log(data);
+    // Retornar datos en formato consistente
+    return data;
+
+  } catch (error) {
+    console.error("Error guardando datos:", error);
+    return {
+      success: false,
+      data: null,
+      error: error.message
+    };
+  }
+};
+
+
 export const eliminarDatosPorId = async (URL, id_producto) => {
   try {
     const response = await fetch(URL, {

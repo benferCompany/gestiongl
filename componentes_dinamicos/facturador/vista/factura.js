@@ -10,7 +10,7 @@ export const factura = (param) => {
     const div = document.createElement('div');
     div.id="formularioFactura"
     div.innerHTML = `
-    ${facturaCss()}
+    ${facturaCss(param)}
     <div class="padre">
         <div class="form">
             <form>
@@ -114,7 +114,6 @@ export const factura = (param) => {
             if(!document.getElementById("contenido").querySelector(".btn-agregar")) return
             param.button[0].evento(e);
         }else if(e.key==="F8"){
-            console.log("generar factura")
             param.button[1].evento(e,div);
         }
     })

@@ -2,34 +2,45 @@
 header("Content-Type: application/json; charset=UTF-8");
 include "../../../conexion.php";
 
-// Recibir búsqueda
-$data = json_decode(file_get_contents("php://input"), true);
-if (!$data) {
-    $data = $_POST; // fallback si no es JSON
-}
-
-$busqueda = $data['search'] ?? '';
-
-if (trim($busqueda) === '') {
-    http_response_code(400);
-    echo json_encode([
-        "status" => "error",
-        "message" => "Debe ingresar un término de búsqueda"
-    ]);
-    exit;
-}
-
 try {
-    // Normalizar búsqueda
+
+    // 🔹 Evita cortes en JSON largos
+    $pdo->exec("SET SESSION group_concat_max_len = 1000000");
+
+    // 🔹 Leer JSON o POST
+    $data = json_decode(file_get_contents("php://input"), true);
+    if (!$data) {
+        $data = $_POST;
+    }
+
+    $busqueda = trim($data['search'] ?? '');
+
+    if ($busqueda === '') {
+        http_response_code(400);
+        echo json_encode([
+            "status"  => "error",
+            "message" => "Debe ingresar un término de búsqueda"
+        ]);
+        exit;
+    }
+
+    // 🔹 Separar palabras
     $palabras = preg_split('/\s+/', strtolower($busqueda));
 
-    // Construir condiciones dinámicas
     $condiciones = [];
-    $parametros = [];
+    $params = [];
 
     foreach ($palabras as $i => $palabra) {
-        $condiciones[] = "(LOWER(CONCAT_WS(' ', fc.id, prov.razon_social, fc.total, fc.descuento, fc.fecha)) LIKE :p$i)";
-        $parametros[":p$i"] = "%" . $palabra . "%";
+        $condiciones[] = "
+            LOWER(CONCAT_WS(' ',
+                CAST(fc.id AS CHAR),
+                prov.razon_social,
+                CAST(fc.total AS CHAR),
+                CAST(fc.descuento AS CHAR),
+                fc.fecha
+            )) LIKE :p$i
+        ";
+        $params[":p$i"] = "%$palabra%";
     }
 
     $sql = "
@@ -40,33 +51,53 @@ try {
             fc.descuento AS factura_descuento,
             fc.total AS factura_total,
             fc.fecha AS factura_fecha,
-            
-            -- Detalles en subconsulta
-            (SELECT JSON_ARRAYAGG(
-                        JSON_OBJECT(
-                            'id', dc.id,
-                            'id_producto', dc.id_producto,
-                            'descripcion', dc.descripcion,
-                            'costo', dc.costo,
-                            'cantidad', dc.cantidad,
-                            'descuento', dc.descuento
-                        )
-                   )
-             FROM DetalleCompra dc
-             WHERE dc.id_factura_compra = fc.id
+
+            -- Detalles de compra
+            (
+                SELECT CONCAT(
+                    '[',
+                    IFNULL(
+                        GROUP_CONCAT(
+                            JSON_OBJECT(
+                                'id', dc.id,
+                                'id_producto', dc.id_producto,
+                                'descripcion', dc.descripcion,
+                                'costo', dc.costo,
+                                'cantidad', dc.cantidad,
+                                'descuento', dc.descuento
+                            )
+                        ),
+                        ''
+                    ),
+                    ']'
+                )
+                FROM DetalleCompra dc
+                WHERE dc.id_factura_compra = fc.id
             ) AS detalles,
 
-            -- Pagos en subconsulta
-            (SELECT JSON_ARRAYAGG(
-                        JSON_OBJECT(
-                            'id', pp.id,
-                            'fecha', pp.fecha,
-                            'tipo_pago', pp.tipo_pago,
-                            'monto', pp.monto
-                        )
-                   )
-             FROM Pagos_Proveedor pp
-             WHERE pp.id_factura_compra = fc.id
+            -- Pagos a proveedor
+            (
+                SELECT CONCAT(
+                    '[',
+                    IFNULL(
+                        GROUP_CONCAT(
+                            JSON_OBJECT(
+                                'id', pp.id,
+                                'fecha', pp.fecha,
+                                'tipo_pago', JSON_OBJECT(
+                                    'id', tp.id,
+                                    'nombre', tp.descripcion
+                                ),
+                                'monto', pp.monto
+                            )
+                        ),
+                        ''
+                    ),
+                    ']'
+                )
+                FROM Pagos_Proveedor pp
+                INNER JOIN Tipo_Pago tp ON tp.id = pp.id_tipo_pago
+                WHERE pp.id_factura_compra = fc.id
             ) AS pagos
 
         FROM FacturaCompra fc
@@ -77,19 +108,26 @@ try {
     ";
 
     $stmt = $pdo->prepare($sql);
-    $stmt->execute($parametros);
-    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->execute($params);
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // 🔹 Convertir JSON string a arrays reales
+    foreach ($data as &$row) {
+        $row['detalles'] = json_decode($row['detalles'], true) ?? [];
+        $row['pagos']    = json_decode($row['pagos'], true) ?? [];
+    }
 
     echo json_encode([
         "status" => "success",
-        "data" => $resultados
-    ]);
+        "data"   => $data
+    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode([
-        "status" => "error",
-        "message" => "Error en la búsqueda",
-        "error" => $e->getMessage()
+        "status"  => "error",
+        "message" => "No se pudo realizar la búsqueda",
+        "error"   => $e->getMessage()
     ]);
 }
+?>

@@ -2,17 +2,6 @@ import { fondoOscuro } from "../../../vistas/componentes/fondoOscuro.js";
 import { debounce, trToJson } from "../../tools/tools.js";
 
 
-
-
-
-
-
-
-
-
-
-
-
 export const jsSelectInputCliente = (inputParam,urlServicio) => {
 
      const div = document.createElement("div");
@@ -20,19 +9,27 @@ export const jsSelectInputCliente = (inputParam,urlServicio) => {
      div.innerHTML = `
      <style>
         #contenido{
-            all:unset;
+            
         }
         #contenido input{
-            
-            border: none;
+            border: 1px solid gray;
             height: 30px;
             border-radius: 5px;
             cursor: pointer;
             margin-bottom: 2em;
         }
         #contenido table{
-            all: unset;
+            color:lightgray;
         }
+        #contenido tbody tr{
+            cursor: pointer;
+            
+        }
+        #contenido tbody tr:hover, #contenido tbody tr:focus{
+            background-color: gray;
+            color: black;
+        }
+
      </style>
          <input  type="text" placeholder="Buscar..."> 
          <hr><br>
@@ -57,18 +54,22 @@ export const jsSelectInputCliente = (inputParam,urlServicio) => {
     
      
      keyDownContenido(div,inputParam)
-    if(document.body.querySelector("#fondoOscuro")) return;
-     document.body.appendChild(fondoOscuro(div));
-     div.querySelector("input").focus();
-    
-     
-    
 
+     if(document.getElementById("contenidoInput")) return;
+        const contenidoInput = document.createElement("div");
+        contenidoInput.id = "contenidoInput";
+        
+        
+        
+        contenidoInput.appendChild(fondoOscuro(div));
+        document.body.appendChild(contenidoInput);
+        div.querySelector("input").focus();
+    
  }    
 
 
 const debouncedGetContent = debounce((contenido,url,inputParam) => {
-            console.log(url)
+            
              contenido.querySelector("tbody").innerHTML = "";
              getContent(contenido,url,inputParam);
          }, 300);
@@ -143,11 +144,11 @@ const keyDownInput = (contenido,url,inputParam)=>{
          console.log(e)
          console.log(div.querySelector("thead"))
          const json = trToJson(e, div.querySelector("thead"));
-         inputParam.value = json["id"] + " " + json["nombre"] + " " + json["apellido"];
+         inputParam.value = inputParam.value = Object.values(json).join(" ");
          inputParam.setAttribute("objeto", JSON.stringify(json));
          inputParam.select();
          
-         document.getElementById("fondoOscuro").remove();
+         document.getElementById("contenidoInput").remove();
     
      }
 

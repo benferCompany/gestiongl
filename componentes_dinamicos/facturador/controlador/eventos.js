@@ -1,3 +1,8 @@
+import { guardardarDatos } from "../../../controladores/hooks.js";
+import { mostrarAlerta } from "../../../vistas/componentes/alertas.js";
+import { crearFacturaHTML } from "../../print/controlador/controlador.js";
+import { formToJSON, tablaAJSON } from "../../tools/tools.js";
+
 export function handleSelect(tbody, li) {
 
     const objeto = li.object.obj
@@ -9,8 +14,8 @@ export function handleSelect(tbody, li) {
             ${li.object.param.headers.map(header=>{
                 const booleanObjeto = objeto[header.name];
                 const response = header.name!=="descripcion" && header.name!=="id"?
-                `<td><input value="${booleanObjeto?objeto[header.name]:header.name=="descuento"?0:1}" type="${header.type}" name="${header.name}"/></td>`:
-                booleanObjeto?`<td>${objeto[header.name]}</td>`:"";
+                `<td data-key="${header.name}"><input value="${booleanObjeto?objeto[header.name]:header.name=="descuento"?0:1}" type="${header.type}" name="${header.name}"/></td>`:
+                booleanObjeto?`<td data-key="${header.name}">${objeto[header.name]}</td>`:"";
                 return response;
              }).join("")}
             <td id="tdAction"><i class="fa-solid fa-trash-can"></i></td>
@@ -71,4 +76,69 @@ export const changeInputs = (div)=>{
             const total = subtotal - totalDescuento;
             div.querySelector(".resumen").querySelector("span").innerText = `$${total.toFixed(2)}`;
     }
+
+
+
+export const generarFactura =async(e,div,URL)=> {
+                if(e instanceof PointerEvent){
+                    e.preventDefault()
+                    div = e.target.closest(".form").parentNode;
+                    
+                }
+                const datosFactura = div.querySelectorAll(".spanSubTotal,.spanTotal")
+                const formJson = formToJSON(div.querySelector("form"));
+                const jsonTable = tablaAJSON(div.querySelector("table"));
+                formJson.subTotal = datosFactura[0].innerText.replace("$","");
+                formJson.total = datosFactura[1].innerText.replace("$","");
+                formJson.productos = jsonTable;
+
+
+                const isEmpty = value => !value || value.trim() === "";
+                const paramMessage = {
+                        color: "whitesmoke",
+                        background: "rgba(211, 27, 27, 1)",
+                        mensaje:""
+                    }
+                if(formJson.productos.length==0){
+                    paramMessage.mensaje="La factura no puede estar vacía."
+                    mostrarAlerta(paramMessage)
+                    return;
+                }if(isEmpty(formJson.proveedor?formJson.proveedor : formJson.cliente) || isEmpty(formJson.id_factura_proveedor? formJson.id_factura_proveedor : formJson.id_factura_venta )){
+                    paramMessage.mensaje="Debe llenar todo los campos del formulario."
+                    mostrarAlerta(paramMessage)
+                    return;
+                }
+                const booleanCliente = div.querySelector("form input[name='cliente']")?div.querySelector("form input[name='cliente']"):div.querySelector("form input[name='proveedor']");
+                console.log(booleanCliente);
+                const objetoTipo = JSON.parse(booleanCliente.getAttribute("objeto"));
+                objetoTipo.nombre?formJson.cliente = objetoTipo :formJson.proveedor = objetoTipo;
+                
+                
+                div.querySelector("form").reset();
+                div.querySelector("table tbody").innerHTML="";
+                div.querySelector(".spanSubTotal").innerText="$0.00";
+                div.querySelector(".spanTotal").innerText="$0.00";
+                console.log(formJson);
+                formJson.productos = formJson.productos.map(p => ({
+                            ...p,
+                            id_producto: p.id
+                        }));
+
+              const clienteProveedorKey = formJson.proveedor
+                    ? { id: "id_proveedor", key: "proveedor" }
+                    : { id: "id_cliente", key: "cliente" };
+
+              const objeto = {
+                   [clienteProveedorKey.id]: formJson[clienteProveedorKey.key].id,
+                   descuento: formJson.descuento ? formJson.descuento : 0,
+                   total: formJson.total,
+                   detalles: formJson.productos,
+                   pagos: []
+                };
+                return {objeto, formJson};                
+                
+                //await guardardarDatos(URL, objeto);
+
+                //crearFacturaHTML(formJson);
+            }
 

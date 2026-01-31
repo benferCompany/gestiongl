@@ -13,7 +13,7 @@ include "../../../conexion.php";
 $data = json_decode(file_get_contents("php://input"), true);
 if (!$data) $data = $_POST;
 
-$required = ['id_producto','id_producto_proveedor','stock','stock_min','stock_max'];
+$required = ['producto_id','id_producto_proveedor','proveedor_id','stock','stock_min','stock_max'];
 foreach ($required as $field) {
     if (!isset($data[$field])) {
         http_response_code(400);
@@ -26,12 +26,13 @@ foreach ($required as $field) {
 }
 
 try {
-    $sql = "INSERT INTO Stock (id_producto, id_producto_proveedor, stock, stock_min, stock_max) 
-            VALUES (:id_producto, :id_producto_proveedor, :stock, :stock_min, :stock_max)";
+    $sql = "INSERT INTO Stock (producto_id, id_producto_proveedor, proveedor_id, stock, stock_min, stock_max) 
+            VALUES (:producto_id, :id_producto_proveedor, :proveedor_id, :stock, :stock_min, :stock_max)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        ":id_producto"            => $data['id_producto'],
+        ":producto_id"            => $data['producto_id'],
         ":id_producto_proveedor"  => $data['id_producto_proveedor'], // VARCHAR
+        ":proveedor_id"           => $data['proveedor_id'],
         ":stock"                  => $data['stock'],
         ":stock_min"              => $data['stock_min'],
         ":stock_max"              => $data['stock_max']
@@ -40,7 +41,9 @@ try {
     echo json_encode([
         "status" => "success",
         "message" => "Stock creado correctamente",
-        "id" => $pdo->lastInsertId()
+        "data" => array_merge(
+            ["id" => $pdo->lastInsertId()],
+            $data)
     ]);
 } catch (PDOException $e) {
     http_response_code(500);

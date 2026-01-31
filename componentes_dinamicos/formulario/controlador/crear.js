@@ -18,17 +18,17 @@ export const crear = async (e) => {
     try {
 
         loading(true);
-        const formulario = new FormData(e.target);
+        const formulario = e.target.objeto.jsonFormulario;
         const objeto = e.target.objeto;
         const response = await fetch(objeto.URLS.crear, {
             method: "POST",
-            body: formulario
+            body: JSON.stringify(formulario)
         });
         const responseJson = await response.json();
 
         if (responseJson.status == "success") {
 
-            
+            console.log(responseJson);
             const table = objeto.contenido.querySelector("table");
             objeto.data.data.push(responseJson.data);
             const tbody = await obtenerTbody(objeto);

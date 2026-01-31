@@ -33,10 +33,12 @@
     CREATE TABLE FacturaCompra(
         id INT AUTO_INCREMENT PRIMARY KEY,
         id_proveedor INT NOT NULL,
+        id_tipo_factura INT NOT NULL,
         descuento DECIMAL(10,2) NOT NULL,
         total DECIMAL(10,2) NOT NULL,
         fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
+        FOREIGN KEY (id_tipo_factura) REFERENCES Tipo_Factura(id),
         FOREIGN KEY (id_proveedor) REFERENCES Proveedor(id)
 
     );
@@ -60,10 +62,12 @@
     CREATE TABLE FacturaVenta(
         id INT AUTO_INCREMENT PRIMARY KEY,
         id_cliente INT NOT NULL,
+        id_tipo_factura INT NOT NULL,
         descuento DECIMAL(10,2) NOT NULL,
         total DECIMAL(10,2) NOT NULL,
         fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
+        FOREIGN KEY (id_tipo_factura) REFERENCES Tipo_Factura(id),
         FOREIGN KEY (id_cliente) REFERENCES Cliente(id)
     );
 
@@ -86,10 +90,23 @@
         id INT AUTO_INCREMENT PRIMARY KEY,
         id_factura_compra INT NOT NULL,
         fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        tipo_pago VARCHAR(255) NOT NULL,
+        id_tipo_pago VARCHAR(50) NOT NULL,
         monto DECIMAL(10,2) NOT NULL,
 
-        FOREIGN KEY(id_factura_compra) REFERENCES FacturaCompra(id)
+        FOREIGN KEY(id_factura_compra) REFERENCES FacturaCompra(id),
+        FOREIGN KEY(id_tipo_pago) REFERENCES Tipo_Pago(id)
+        
+    );
+
+    CREATE TABLE Pagos_Cliente(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        id_factura_venta INT NOT NULL,
+        fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        id_tipo_pago VARCHAR(50) NOT NULL,
+        monto DECIMAL(10,2) NOT NULL,
+
+        FOREIGN KEY(id_factura_venta) REFERENCES FacturaVenta(id),
+        FOREIGN KEY(id_tipo_pago) REFERENCES Tipo_Pago(id)
         
     );
 
@@ -110,6 +127,11 @@
 
         FOREIGN KEY (producto_id) REFERENCES Producto(id),
         FOREIGN KEY (proveedor_id) REFERENCES Proveedor(id)
+    );
+
+    CREATE TABLE Tipo_Pago(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        tipo_pago VARCHAR(255) NOT NULL
     );
 
 
@@ -156,6 +178,10 @@
         
     );
 
+    CREATE TABLE Tipo_Factura(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        tipo_factura VARCHAR(50) NOT NULL
+    );
 
 
 

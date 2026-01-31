@@ -28,7 +28,7 @@ const style = `
             padding: 10px;
             border-radius: 5px;
         }
-        button {
+        #subNavegadores, #navegadores button {
             background-color: rgba(240, 133, 33, 1);
             color: whitesmoke;
             cursor: pointer;

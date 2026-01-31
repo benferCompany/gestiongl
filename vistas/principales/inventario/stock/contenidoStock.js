@@ -8,13 +8,10 @@ const json = {
         { header: "Id", name: "id", type:"number" },
         { header: "Producto Id", name: "producto_id", type: "text", tipo:"select", accion:"buscarProducto", llaveMostrar:"descripcion"},
         { header: "Proveedor Id", name: "proveedor_id", type: "text", tipo:"select", accion:"buscarProveedor", llaveMostrar:"razon_social" },
-        { header: "Razón Social", name: "razon_social", type: "text" },
-        { header: "Id del producto", name: "id_producto", type: "number" },
-        { header: "Descripción", name: "descripcion", type: "text"},
-        { header: "Id del proveedor", name: "id_producto_proveedor", type: "number" },
-        { header: "Stock", name: "stock", type: "number"},
-        { header: "Stock Min", name: "stock_min",type: "number"},
-        { header: "Stock Max", name: "stock_max" ,type: "number"}
+        { header: "Id producto proveedor", name: "id_producto_proveedor", type: "text",tipo:"" },
+        { header: "Stock", name: "stock", type: "number", tipo:""},
+        { header: "Stock Min", name: "stock_min",type: "number", tipo:""},
+        { header: "Stock Max", name: "stock_max" ,type: "number", tipo:""}
 
     ],
 
@@ -32,7 +29,24 @@ const json = {
     },
     contenido: document.getElementById("contenido"),
     texto: "",
-    eventos: { editar: eventoSubmit, crear: crearFormulario }
+    eventos: { editar: eventoSubmit, crear: (e)=>{
+        
+        e.preventDefault();
+        const formData = Object.fromEntries(new FormData(e.target));
+
+        const objeto = {
+            ...formData,
+            producto_id: formData.producto_id.split(" ")[0],
+            proveedor_id: formData.proveedor_id.split(" ")[0]
+        };
+        e.target.objeto.jsonFormulario = objeto;
+        
+
+        crearFormulario(e);
+    } },
+    mensajes: {
+        eliminar: "¿Estas seguro que quieres eliminar el stock del producto?"
+    }
 
 
 }

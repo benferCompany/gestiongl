@@ -1,0 +1,35 @@
+<?php
+header("Content-Type: application/json; charset=UTF-8");
+include "../../../conexion.php";
+
+$data = json_decode(file_get_contents("php://input"), true);
+
+if (!isset($data["descripcion"]) || empty(trim($data["descripcion"]))) {
+    http_response_code(400);
+    echo json_encode([
+        "status" => "error",
+        "message" => "La descripción es obligatoria"
+    ]);
+    exit;
+}
+
+try {
+    $sql = "INSERT INTO Tipo_Pago (descripcion) VALUES (:descripcion)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":descripcion", $data["descripcion"]);
+    $stmt->execute();
+
+    echo json_encode([
+        "status" => "success",
+        "message" => "Tipo de pago creado correctamente",
+        "id" => $pdo->lastInsertId()
+    ]);
+
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode([
+        "status" => "error",
+        "message" => "No se pudo crear el tipo de pago",
+        "error" => $e->getMessage()
+    ]);
+}
