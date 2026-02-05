@@ -9,14 +9,15 @@ try {
 
     // 1. Insertar factura
     $stmt = $pdo->prepare("
-        INSERT INTO FacturaCompra (id_proveedor, descuento, total, id_tipo_factura)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO FacturaCompra (id_proveedor, descuento, total, id_tipo_factura, fecha)
+        VALUES (?, ?, ?, ?, ?)
     ");
     $stmt->execute([
         $data['id_proveedor'],
         $data['descuento'],
         $data['total'],
         $data['id_tipo_factura'],
+        $data['fecha']
     ]);
 
     $facturaId = $pdo->lastInsertId();

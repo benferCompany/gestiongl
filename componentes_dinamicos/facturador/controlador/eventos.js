@@ -1,13 +1,10 @@
-import { guardardarDatos } from "../../../controladores/hooks.js";
-import { mostrarAlerta } from "../../../vistas/componentes/alertas.js";
-import { crearFacturaHTML } from "../../print/controlador/controlador.js";
+
 import { formToJSON, tablaAJSON } from "../../tools/tools.js";
 
 export function handleSelect(tbody, li) {
 
     const objeto = li.object.obj
-    console.log(tbody)
-    console.log(li.object.param)
+    
     const tr = document.createElement("tr");
    
     tr.innerHTML = `
@@ -85,6 +82,7 @@ export const generarFactura =async(e,div,URL)=> {
                     div = e.target.closest(".form").parentNode;
                     
                 }
+
                 const datosFactura = div.querySelectorAll(".spanSubTotal,.spanTotal")
                 const formJson = formToJSON(div.querySelector("form"));
                 const jsonTable = tablaAJSON(div.querySelector("table"));
@@ -93,31 +91,15 @@ export const generarFactura =async(e,div,URL)=> {
                 formJson.productos = jsonTable;
 
 
-                const isEmpty = value => !value || value.trim() === "";
-                const paramMessage = {
-                        color: "whitesmoke",
-                        background: "rgba(211, 27, 27, 1)",
-                        mensaje:""
-                    }
-                if(formJson.productos.length==0){
-                    paramMessage.mensaje="La factura no puede estar vacía."
-                    mostrarAlerta(paramMessage)
-                    return;
-                }if(isEmpty(formJson.proveedor?formJson.proveedor : formJson.cliente) || isEmpty(formJson.id_factura_proveedor? formJson.id_factura_proveedor : formJson.id_factura_venta )){
-                    paramMessage.mensaje="Debe llenar todo los campos del formulario."
-                    mostrarAlerta(paramMessage)
-                    return;
-                }
+                
+               
                 const booleanCliente = div.querySelector("form input[name='cliente']")?div.querySelector("form input[name='cliente']"):div.querySelector("form input[name='proveedor']");
                 console.log(booleanCliente);
                 const objetoTipo = JSON.parse(booleanCliente.getAttribute("objeto"));
                 objetoTipo.nombre?formJson.cliente = objetoTipo :formJson.proveedor = objetoTipo;
                 
                 
-                div.querySelector("form").reset();
-                div.querySelector("table tbody").innerHTML="";
-                div.querySelector(".spanSubTotal").innerText="$0.00";
-                div.querySelector(".spanTotal").innerText="$0.00";
+                
                 console.log(formJson);
                 formJson.productos = formJson.productos.map(p => ({
                             ...p,
@@ -135,10 +117,45 @@ export const generarFactura =async(e,div,URL)=> {
                    detalles: formJson.productos,
                    pagos: []
                 };
-                return {objeto, formJson};                
-                
-                //await guardardarDatos(URL, objeto);
 
-                //crearFacturaHTML(formJson);
+
+                
+                return {objeto, formJson};                
+    
             }
 
+
+
+
+export const resetFacturaCompleta = (formJson) => {
+    // 1️⃣ Reset formulario
+    const div = document.getElementById("formularioFactura");
+    if (div) {
+        const form = div.querySelector("form");
+        if (form) form.reset();
+
+        const tbody = div.querySelector("table tbody");
+        if (tbody) tbody.innerHTML = "";
+
+
+        const subTotal = div.querySelector(".spanSubTotal");
+        if (subTotal) subTotal.innerText = "$0.00";
+
+        const total = div.querySelector(".spanTotal");
+        if (total) total.innerText = "$0.00";
+    }
+
+    // 2️⃣ Reset objeto en memoria
+    if (formJson) {
+        formJson.productos = [];
+        formJson.cliente = null;
+        formJson.tipo_factura = null;
+        formJson.id_factura_cliente = null;
+        formJson.total = 0;
+        formJson.subtotal = 0;
+    }
+
+    // 4️⃣ Cerrar modal si existe
+    const fondo = document.querySelector("#fondoOscuroSinEsc");
+    if (fondo) document.body.removeChild(fondo);
+};

@@ -53,6 +53,7 @@ try {
             fv.descuento AS factura_descuento,
             fv.total AS factura_total,
             fv.fecha AS factura_fecha,
+            fv.id_tipo_factura,
 
             -- Detalles de factura
             (

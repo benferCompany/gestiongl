@@ -1,3 +1,5 @@
+import { mostrarAlerta } from "../../vistas/componentes/alertas.js";
+
 export const trAJson = (tr, json) => {
     const tds = tr.querySelectorAll("td:not(.td-btn)");
     return json.content.map((col, i) => ({
@@ -78,3 +80,28 @@ export function trToJson(trElement, theadElement) {
 
   return result;
 }
+
+
+
+export function formularioCompleto(form) {
+
+  const paramMessage = {
+        color: "whitesmoke",
+        background: "rgba(211, 27, 27, 1)",
+        mensaje:""
+                    }
+
+  const boolean = Object.values(form).every(
+        value => value !== null && value !== undefined && value !== ""
+    );  
+  
+  if (!boolean) {
+    paramMessage.mensaje = "Debe completar todos los campos del formulario.";
+    mostrarAlerta(paramMessage);
+  }
+
+  return !boolean;
+
+}
+
+

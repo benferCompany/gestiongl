@@ -4,17 +4,37 @@ include "../../../conexion.php";
 
 try {
 
-    // 🔹 Evita cortes en JSON largos
     $pdo->exec("SET SESSION group_concat_max_len = 1000000");
 
     $sql = "
         SELECT 
             fc.id AS factura_id,
             fc.id_proveedor,
+
+            -- Proveedor
+            JSON_OBJECT(
+                'id', prov.id,
+                'razon_social', prov.razon_social,
+                'cuit', prov.cuit,
+                'nombre_contacto', prov.nombre_contacto,
+                'direccion', prov.direccion,
+                'telefono', prov.telefono
+            ) AS proveedor,
+
+
+
+            -- Tipo de factura
+            JSON_OBJECT(
+                'id', tf.id,
+                'tipo_factura', tf.tipo_factura
+            ) AS tipo_factura,
+
+
             prov.razon_social,
             fc.descuento AS factura_descuento,
             fc.total AS factura_total,
             fc.fecha AS factura_fecha,
+            fc.id_tipo_factura,
 
             -- Detalles de factura
             (
@@ -26,8 +46,8 @@ try {
                                 'id', dc.id,
                                 'id_producto', dc.id_producto,
                                 'descripcion', dc.descripcion,
-                                'costo', dc.costo,
                                 'cantidad', dc.cantidad,
+                                'pvp', dc.costo,
                                 'descuento', dc.descuento
                             )
                         ),
@@ -39,7 +59,7 @@ try {
                 WHERE dc.id_factura_compra = fc.id
             ) AS detalles,
 
-            -- Pagos de proveedor
+            -- Pagos de proveedor (MISMA ESTRUCTURA QUE VENTA)
             (
                 SELECT CONCAT(
                     '[',
@@ -48,7 +68,10 @@ try {
                             JSON_OBJECT(
                                 'id', pp.id,
                                 'fecha', pp.fecha,
-                                'tipo_pago', pp.tipo_pago,
+                                'tipo_pago', JSON_OBJECT(
+                                    'id', tp.id,
+                                    'nombre', tp.descripcion
+                                ),
                                 'monto', pp.monto
                             )
                         ),
@@ -57,19 +80,22 @@ try {
                     ']'
                 )
                 FROM Pagos_Proveedor pp
+                INNER JOIN Tipo_Pago tp ON tp.id = pp.id_tipo_pago
                 WHERE pp.id_factura_compra = fc.id
             ) AS pagos
 
         FROM FacturaCompra fc
         INNER JOIN Proveedor prov ON fc.id_proveedor = prov.id
+        INNER JOIN Tipo_Factura tf ON fc.id_tipo_factura = tf.id
         ORDER BY fc.id DESC
     ";
 
     $stmt = $pdo->query($sql);
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // 🔹 Convertir strings JSON a arrays reales
     foreach ($data as &$row) {
+        $row['proveedor'] = json_decode($row['proveedor'], true) ?? [];
+        $row['tipo_factura'] = json_decode($row['tipo_factura'], true) ?? [];
         $row['detalles'] = json_decode($row['detalles'], true) ?? [];
         $row['pagos']    = json_decode($row['pagos'], true) ?? [];
     }

@@ -90,7 +90,7 @@ export function crearFacturaHTML(data) {
         titulo.textContent = "Factura";
 
         const nroFactura = document.createElement("p");
-        nroFactura.textContent = `N° Factura: ${data.id_factura_proveedor}`;
+        nroFactura.textContent = `N° Factura: ${data.id_factura_proveedor||data.id_factura_cliente}`;
         const tipoFactura = document.createElement("h1");
         tipoFactura.textContent = `${data.tipo_factura.tipo_factura}`;
 
@@ -164,9 +164,47 @@ export function crearFacturaHTML(data) {
     // ===============================
     // IMPRIMIR
     // ===============================
-    const ventana = window.open("", "_blank");
+    
+    const facturaHTML = factura.outerHTML;
+
+    const ventana = window.open(
+    "",
+    "_blank",
+    "width=800,height=600"
+    );
+
+    ventana.document.open();
+    ventana.document.write(`
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+    <meta charset="UTF-8">
+    <title>Factura</title>
+    <style>
+        /* acá tus estilos de impresión */
+        body {
+        font-family: Arial, sans-serif;
+        }
+    </style>
+    </head>
+    <body>
+    ${facturaHTML}
+    </body>
+    </html>
+    `);
+    ventana.document.close();
+
+    ventana.onload = () => {
+    ventana.focus();
+    ventana.print();
+    };
+
+    
+    
+    
+    /*const ventana = window.open("", "_blank");
     ventana.document.write(factura.outerHTML);
     ventana.document.close();
     ventana.focus();
-    ventana.print();
+    ventana.print();*/
 }

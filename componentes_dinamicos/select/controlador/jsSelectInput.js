@@ -55,7 +55,7 @@ export const jsSelectInputCliente = (inputParam,urlServicio) => {
      
      keyDownContenido(div,inputParam)
 
-     if(document.getElementById("contenidoInput")) return;
+     if(document.getElementById("contenidoInput")) document.getElementById("contenidoInput").remove();
         const contenidoInput = document.createElement("div");
         contenidoInput.id = "contenidoInput";
         

@@ -8,13 +8,19 @@ $username = "lauty";
 $password = "root";*/
 
 
+
+/*
+$host = "localhost";
+$port = 3306; 
+$dbname = "gestionbl";
+$username = "mygestionb03";
+$password = "Ben-fer240212" ;
+*/
 $host = "localhost";
 $port = 3306; 
 $dbname = "gestionbl";
 $username = "root";
 $password = "" ;
-
-
 
 try {
     // Crear conexión con PDO

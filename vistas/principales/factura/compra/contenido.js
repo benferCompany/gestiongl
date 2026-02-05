@@ -1,5 +1,5 @@
 import { contenidoFacturador } from "../../../../componentes_dinamicos/facturador/contenido.js"
-import { generarFactura, handleSelect } from "../../../../componentes_dinamicos/facturador/controlador/eventos.js";
+import {handleSelect } from "../../../../componentes_dinamicos/facturador/controlador/eventos.js";
 import { tipoPago } from "../../../../componentes_dinamicos/facturador/vista/tipoPago.js";
 import { URL } from "../../../../controladores/url/url.js";
 
@@ -17,9 +17,7 @@ const param = {
         },
         {
             value: "Generar Factura (F8)", evento: async (e,div) => {
-               tipoPago(e,div,URL + "servicios/principales/factura/compra/crearCompra.php","compra");
-               
-                //generarFactura(e,div,URL + "servicios/principales/factura/compra/crearCompra.php","compra");
+                tipoPago(e,div,URL + "servicios/principales/factura/compra/crearCompra.php","compra");    
             }
         }
     ],

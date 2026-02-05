@@ -1,21 +1,35 @@
 import { guardardarDatos } from "../../../controladores/hooks.js";
 import { URL } from "../../../controladores/url/url.js";
+import { mostrarAlerta } from "../../../vistas/componentes/alertas.js";
 import {fondoOscuroSinEsc } from "../../../vistas/componentes/fondoOscuro.js";
 import { crearFacturaHTML } from "../../print/controlador/controlador.js";
-import { generarFactura } from "../controlador/eventos.js";
+import { formularioCompleto } from "../../tools/tools.js";
+import { generarFactura, resetFacturaCompleta } from "../controlador/eventos.js";
 
 
 export const tipoPago = async(e, paramDiv,url,tipo)=>{
+
+    
     const div = document.createElement("div");
     div.id = "tipoPago";
     const pagos = await getTipoPago();
     const tipoFactura = await getTipoFactura();
 
     const response = await generarFactura(e, paramDiv,url,tipo);
+
     if (!response) return;
     const objeto = response.objeto;
     const formJson = response.formJson;
     
+ if(formularioCompleto(formJson)) return;
+                if(formJson.productos.length <= 0 || !formJson.productos.length){
+                    mostrarAlerta({
+                        color: "whitesmoke",
+                        background: "rgba(211, 27, 27, 1)",
+                        mensaje:"Debe agregar al menos un producto a la factura."
+                    });
+                    return;
+        }
 
 
     div.innerHTML = `
@@ -71,6 +85,8 @@ export const tipoPago = async(e, paramDiv,url,tipo)=>{
         const datosFactura = {
             ...objeto,
             id_tipo_factura: tipo_factura.id,
+    
+            fecha: new Date().toISOString().split('T')[0],
             pagos: [{
                 fecha: new Date().toISOString().split('T')[0],
                 id_tipo_pago: tipoPagoSeleccionado,
@@ -78,12 +94,28 @@ export const tipoPago = async(e, paramDiv,url,tipo)=>{
                
             }]
         };
-        await guardardarDatos(url, datosFactura);
 
-        crearFacturaHTML(formJson);
+       
+        const response = await guardardarDatos(url, datosFactura);
+        console.log(datosFactura);
+        if(response && response.status === "success"){
+            
+             
+            
+            formJson.id_factura_cliente =
+            tipo_factura.tipo_factura + "-" + response.factura.id;
 
-        document.body.removeChild(document.body.querySelector("#fondoOscuroSinEsc"));
-        
+            crearFacturaHTML(formJson);
+            resetFacturaCompleta(formJson);
+            
+
+        }else{
+            mostrarAlerta({
+                color: "whitesmoke",
+                background: "rgba(211, 27, 27, 1)",
+                mensaje:"Error al guardar la factura."
+            });
+        }
     });
 
     document.body.appendChild(fondoOscuroSinEsc(div));
@@ -118,3 +150,8 @@ const getTipoFactura = async()=>{
         return { success: false, error: e.message };
     }
 }
+
+
+
+
+

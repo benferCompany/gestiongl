@@ -3,7 +3,6 @@ header("Content-Type: application/json; charset=UTF-8");
 include "../../../conexion.php";
 
 try {
-
     // 🔹 Evita cortes en JSON largos
     $pdo->exec("SET SESSION group_concat_max_len = 1000000");
 
@@ -11,8 +10,24 @@ try {
         SELECT 
             fv.id AS factura_id,
             fv.id_cliente,
-            cli.nombre,
-            cli.apellido,
+            fv.id_tipo_factura,
+
+            -- Cliente 
+            JSON_OBJECT(
+                'id', cli.id,
+                'nombre', cli.nombre,
+                'apellido', cli.apellido,
+                'cuit', cli.cuit,
+                'direccion', cli.direccion,
+                'telefono', cli.telefono
+            ) AS cliente,
+
+            -- Tipo de factura
+            JSON_OBJECT(
+                'id', tf.id,
+                'tipo_factura', tf.tipo_factura
+            ) AS tipo_factura,
+
             fv.descuento AS factura_descuento,
             fv.total AS factura_total,
             fv.fecha AS factura_fecha,
@@ -30,7 +45,7 @@ try {
                                 'cantidad', dv.cantidad,
                                 'pvp', dv.pvp,
                                 'descuento', dv.descuento
-                            )
+                            ) SEPARATOR ','
                         ),
                         ''
                     ),
@@ -40,7 +55,7 @@ try {
                 WHERE dv.id_factura_venta = fv.id
             ) AS detalles,
 
-            -- Pagos de cliente
+            -- Pagos del cliente
             (
                 SELECT CONCAT(
                     '[',
@@ -54,7 +69,7 @@ try {
                                     'nombre', tp.descripcion
                                 ),
                                 'monto', pc.monto
-                            )
+                            ) SEPARATOR ','
                         ),
                         ''
                     ),
@@ -67,6 +82,7 @@ try {
 
         FROM FacturaVenta fv
         INNER JOIN Cliente cli ON fv.id_cliente = cli.id
+        INNER JOIN Tipo_Factura tf ON fv.id_tipo_factura = tf.id
         ORDER BY fv.id DESC
     ";
 
@@ -75,8 +91,10 @@ try {
 
     // 🔹 Convertir strings JSON a arrays reales
     foreach ($data as &$row) {
+        $row['cliente'] = json_decode($row['cliente'], true) ?? [];
+        $row['tipo_factura'] = json_decode($row['tipo_factura'], true) ?? [];
         $row['detalles'] = json_decode($row['detalles'], true) ?? [];
-        $row['pagos']    = json_decode($row['pagos'], true) ?? [];
+        $row['pagos'] = json_decode($row['pagos'], true) ?? [];
     }
 
     echo json_encode([

@@ -18,11 +18,12 @@ export const crear = async (e) => {
     try {
 
         loading(true);
-        const formulario = e.target.objeto.jsonFormulario;
         const objeto = e.target.objeto;
+        const formulario =objeto.contenido.querySelector("form");
+        
         const response = await fetch(objeto.URLS.crear, {
             method: "POST",
-            body: JSON.stringify(formulario)
+            body: new FormData(formulario)
         });
         const responseJson = await response.json();
 

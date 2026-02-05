@@ -51,6 +51,7 @@ try {
             fc.descuento AS factura_descuento,
             fc.total AS factura_total,
             fc.fecha AS factura_fecha,
+            fc.id_tipo_factura,
 
             -- Detalles de compra
             (

@@ -1,5 +1,18 @@
     /*Principales*/
 
+
+
+    CREATE TABLE Tipo_Pago(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        descripcion VARCHAR(255) NOT NULL
+    );
+
+
+    CREATE TABLE Tipo_Factura(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        tipo_factura VARCHAR(50) NOT NULL
+    );
+
     CREATE TABLE Producto(
         id INT AUTO_INCREMENT PRIMARY KEY,
         id_producto VARCHAR(50) UNIQUE NULL,
@@ -129,11 +142,6 @@
         FOREIGN KEY (proveedor_id) REFERENCES Proveedor(id)
     );
 
-    CREATE TABLE Tipo_Pago(
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        tipo_pago VARCHAR(255) NOT NULL
-    );
-
 
 
 
@@ -177,11 +185,5 @@
         FOREIGN KEY(id_capital) REFERENCES Capital(id)
         
     );
-
-    CREATE TABLE Tipo_Factura(
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        tipo_factura VARCHAR(50) NOT NULL
-    );
-
 
 
