@@ -44,10 +44,10 @@ function verificarSearch(formulario) {
     const input = formulario.querySelector('input[name="search"]');
     
     if (input && input.value.trim() !== "") {
-        console.log("El input tiene valor:", input.value);
+        console.info("El input tiene valor:", input.value);
         return true;
     } else {
-        console.log("El input está vacío");
+        console.info("El input está vacío");
         return false;
     }
 }

@@ -6,6 +6,7 @@ import { URL } from "../../../../controladores/url/url.js";
 
 
 const param = {
+    tipoDeEstilos:"venta",
     inputs: [
         
         { type: "text", name: "cliente", id: "", placeholder: "Cliente", selector:true, url: URL + "servicios/principales/cliente/buscarCliente.php"},

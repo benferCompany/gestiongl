@@ -1,7 +1,7 @@
 import { guardardarDatos } from "../../../controladores/hooks.js";
 import { URL } from "../../../controladores/url/url.js";
 import { mostrarAlerta } from "../../../vistas/componentes/alertas.js";
-import {fondoOscuroSinEsc } from "../../../vistas/componentes/fondoOscuro.js";
+import {fondoOscuro, fondoOscuroSinEsc } from "../../../vistas/componentes/fondoOscuro.js";
 import { crearFacturaHTML } from "../../print/controlador/controlador.js";
 import { formularioCompleto } from "../../tools/tools.js";
 import { generarFactura, resetFacturaCompleta } from "../controlador/eventos.js";
@@ -14,6 +14,10 @@ export const tipoPago = async(e, paramDiv,url,tipo)=>{
     div.id = "tipoPago";
     const pagos = await getTipoPago();
     const tipoFactura = await getTipoFactura();
+    
+    if(tipo ==="compra"){
+        tipoFactura.data =tipoFactura.data.filter(tipo=>tipo.id==1)
+    }
 
     const response = await generarFactura(e, paramDiv,url,tipo);
 
@@ -38,10 +42,15 @@ export const tipoPago = async(e, paramDiv,url,tipo)=>{
                 width: 300px;
                 height: 250px;
                 background-color: white;
+                color:black;
 
             }
+            #tipoPago .exit-pago{
+                display:flex;
+                justify-content:end;
+            }
         </style>
-
+        <div class="exit-pago"><span >X</span></div>
         <h2>Seleccione el tipo de pago</h2>
         <div class="opcionesPago">
             <select id="selectTipoPago">
@@ -74,11 +83,15 @@ export const tipoPago = async(e, paramDiv,url,tipo)=>{
         const tipoPagoSeleccionado = div.querySelector("#selectTipoPago").value;
         const montoRecibido = parseFloat(inputMonto.value) || 0;
         const tipo_factura = JSON.parse(div.querySelector("#selectTipoFactura").value);
-        console.log(tipo_factura);
+        (tipo_factura);
 
         formJson.tipo_factura = tipo_factura;
-        if(montoRecibido < objeto.total){
-            alert("El monto recibido es insuficiente.");
+        if(montoRecibido < objeto.total && tipo!="compra"){
+            mostrarAlerta({
+                        color: "whitesmoke",
+                        background: "rgba(211, 27, 27, 1)",
+                        mensaje:"El de pago no puede ser menos que el total."
+                    });
             return;
         }
         
@@ -97,7 +110,7 @@ export const tipoPago = async(e, paramDiv,url,tipo)=>{
 
        
         const response = await guardardarDatos(url, datosFactura);
-        console.log(datosFactura);
+        (datosFactura);
         if(response && response.status === "success"){
             
              
@@ -117,7 +130,10 @@ export const tipoPago = async(e, paramDiv,url,tipo)=>{
             });
         }
     });
-
+    div.querySelector(".exit-pago span").addEventListener("click",()=>{
+        const fondo = document.getElementById("fondoOscuroSinEsc");
+        if(fondo) fondo.remove();
+    })
     document.body.appendChild(fondoOscuroSinEsc(div));
 
 }

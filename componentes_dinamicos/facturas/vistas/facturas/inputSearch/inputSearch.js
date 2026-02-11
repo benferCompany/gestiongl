@@ -1,3 +1,4 @@
+import {cargarTabla } from "../tabla/controlador/controlador.js";
 import { buscar } from "./controlador.js";
 
 export const inputSearch = (param)=>{
@@ -5,22 +6,21 @@ export const inputSearch = (param)=>{
     div.id="inputSearch";
     
     div.innerHTML=`
-        <style>
-            
-            #inputSearch input{
-                width:50%;
-                padding:1em;
-                margin: 0 1em 0em 1em;
-                font-size:1em;
-            }
-        </style>
+    
         <input type='search'placeholder='Buscar'/>
         
         `
 
-    div.querySelector("input").addEventListener("input",()=>{
+    div.querySelector("input").addEventListener("input",async(e)=>{
+        e.target.value = e.target.value.replace(/^\s+/, "");
+        param.inputSearch = div.querySelector("input");
+        if(e.target.value =="") {
+            cargarTabla(param)
+        };
         buscar(param);
         
     })
-    return div;
+    return div; 
 }
+
+

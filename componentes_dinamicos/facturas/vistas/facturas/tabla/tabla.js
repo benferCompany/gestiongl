@@ -1,17 +1,23 @@
+
 import { crearFacturaHTML } from "../../../../print/controlador/controlador.js";
 import { buttonPagos } from "../../pagos.js";
+import { paramPresupuesto } from "../controlador/jsonPresupuesto.js";
 import { cssFacturas } from "./style/cssTable.js";
+
+import { updateProduct } from "../../../../tools/tools.js";
+import { factura } from "../vista/presupuestoFactura.js";
 
 export const tablaFacturas = (param) => {
  const facturas = param.factura;
  const table = document.createElement("table");
+    console.log(param);
     table.innerHTML=`
        ${cssFacturas(param)}
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Fecha</th>
-                <th>${param.select.value}</th>
+                <th>${param.select.value=="compra"?"Proveedor":"Cliente"}</th>
                 <th>descuento</th>
                 <th>Total</th>
                 <th>Estado</th>
@@ -25,24 +31,38 @@ export const tablaFacturas = (param) => {
                     pago.total = factura.factura_total;
                     montoPagado += pago.monto;
                 });
-                let estado = "Sin Pagos";
+                let estado = {estado:"Sin Pagos", classEstado:"sin-pagos"};
                 if (montoPagado >= factura.factura_total) {
-                    estado = "Pagada";
+                    estado = {estado:"Pagada", classEstado:"pagada"};
                 } else if (montoPagado > 0) {
-                    estado = "Parcial";
-                }   
+                    estado = {estado:"Parcial", classEstado:"parcial"};
+                }  
+                
                 return `
                 <tr>
                     <td>${factura.factura_id}</td>
                     <td>${factura.factura_fecha}</td>
-                    <td>${factura.nombre?factura.nombre+" "+factura.apellido:factura.razon_social}</td>
+                    <td>${param.select.value ==="compra"? factura.razon_social:factura.cliente?factura.cliente.nombre + " " + factura.cliente.apellido:"" }</td>
                     <td>${factura.factura_descuento}</td>
                     <td>${factura.factura_total}</td>
-                    <td>${estado!="Sin Pagos"?
-                        "<button class='button-estado' objeto='"
-                            +JSON.stringify(factura.pagos)+"'>"+estado+"</button>":estado}</td>
+                    
+                    ${param.selectValue !="presupuesto"?
+                    `<td class="${estado.classEstado}">
+                        ${estado.estado!="Sin Pagos"?
+                                "<button class='button-estado' objeto='"
+                                    +JSON.stringify(factura.pagos)+"'>"+estado.estado+"</button>":`<button>${estado.estado}</button>`}
+                    </td>`:`
+
                     <td>
-                        <button objeto='${JSON.stringify(factura)}' data-id="${factura.id}" class="ver-detalles">Ver Detalles</button>
+
+                            <button class="ver-detalles" objeto='${JSON.stringify(factura)}' data-id="${factura.id}" >Ver Detalles</button>
+                    </td>`
+                
+                }
+
+                    <td>
+                        ${param.select.value =="presupuesto"?`<button style="background:#1fda66" class="button-presupuesto" objeto='${JSON.stringify(factura)}'>Facturar</button>`:`<button objeto='${JSON.stringify(factura)}' data-id="${factura.id}" class="ver-detalles">Ver Detalles</button>`}
+                        
                     </td>
                 </tr>
              `}).join('')}  
@@ -71,11 +91,32 @@ export const tablaFacturas = (param) => {
                  fecha: objeto.factura_fecha,
                  id_factura_cliente: objeto.factura_id
                 };
-            console.log(param);
+            
             crearFacturaHTML(updateObjeto);
         });
     });
 
+
+    table.querySelectorAll('.button-presupuesto').forEach(async button=>button.addEventListener("click",async(e)=>{
+        
+        const objeto = JSON.parse(e.target.getAttribute("objeto"));
+        const productsUpdate = await updateProduct(objeto.detalles,param.URLS.buscarById);
+        
+        
+        if(productsUpdate) objeto.detalles =productsUpdate;
+        paramPresupuesto.defaultData.presupuesto = objeto;
+        
+        const contenido = document.getElementById("contenido");
+        contenido.innerHTML = ""
+        contenido.append(factura(paramPresupuesto))
+        
+
+        
+        
+    }))
     return table;
 
+
 }
+
+

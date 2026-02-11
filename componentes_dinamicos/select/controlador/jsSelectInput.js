@@ -141,8 +141,8 @@ const keyDownInput = (contenido,url,inputParam)=>{
       const eventoClick =(e,div,inputParam)=>{
          
           if(!e) return;
-         console.log(e)
-         console.log(div.querySelector("thead"))
+         
+         
          const json = trToJson(e, div.querySelector("thead"));
          inputParam.value = inputParam.value = Object.values(json).join(" ");
          inputParam.setAttribute("objeto", JSON.stringify(json));

@@ -83,7 +83,7 @@ try {
         FROM FacturaVenta fv
         INNER JOIN Cliente cli ON fv.id_cliente = cli.id
         INNER JOIN Tipo_Factura tf ON fv.id_tipo_factura = tf.id
-        ORDER BY fv.id DESC
+        ORDER BY fv.id DESC LIMIT 20
     ";
 
     $stmt = $pdo->query($sql);

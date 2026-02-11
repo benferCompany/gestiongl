@@ -1,12 +1,11 @@
-import { observarCambios } from "../../../controladores/hooks.js";
-import { buttonAgregar } from "../controlador/buttons.js";
-import { changeInputs } from "../controlador/eventos.js";
-import { facturaCss } from "../style/cssFactura.js";
-import { jsSelectInputCliente } from "../../select/controlador/jsSelectInput.js";
+import { observarCambios } from "../../../../../controladores/hooks.js";
+import { buttonAgregar } from "../../../../facturador/controlador/buttons.js";
+import { changeInputs, handleSelect } from "../../../../facturador/controlador/eventos.js";
+import { facturaCss } from "../../../../facturador/style/cssFactura.js";
+import { jsSelectInputCliente } from "../../../../select/controlador/jsSelectInput.js";
 
 export const factura = (param) => {
-
-    param.tipoObject = param.inputs[0].name;
+ 
     /* ===============================
        LIMPIEZA DE FACTURA ANTERIOR
     ================================*/
@@ -87,6 +86,15 @@ export const factura = (param) => {
         </div>
     `;
 
+
+
+    /* ===============================
+       PRECARGA DESDE JSON
+    ================================*/
+    if (param.defaultData) {
+        cargarFacturaPorDefecto(div, param);
+        
+    }
     /* ===============================
        OBSERVER (GUARDADO)
     ================================*/
@@ -153,6 +161,7 @@ export const factura = (param) => {
     window._facturaKeyHandler = (e) => keyDownEvent(param, e);
     document.body.addEventListener("keyup", window._facturaKeyHandler);
 
+
     return div;
 };
 
@@ -175,4 +184,71 @@ const keyDownEvent = (param, e) => {
     if (e.key === "F8") {
         param.button[1].evento(e, facturaActual);
     }
+};
+
+/* ===============================
+   PRECARGA FACTURA / PRESUPUESTO
+================================*/
+const cargarFacturaPorDefecto = (div, param) => {
+    if (!param.defaultData?.presupuesto) return;
+
+    const data = param.defaultData.presupuesto;
+    /* ===== CLIENTE ===== */
+    const inputCliente = div.querySelector('input[name="cliente"]');
+    if (inputCliente && data.cliente) {
+        inputCliente.value = `${data.cliente.nombre} ${data.cliente.apellido}`;
+        inputCliente.setAttribute("objeto",JSON.stringify(data.cliente))
+    }
+
+    /* ===== PRODUCTOS ===== */
+    const tbody = div.querySelector("tbody");
+    tbody.innerHTML = "";
+
+    let subtotal = 0;
+    data.detalles.forEach((prod,i) => {
+      
+        const totalProducto =
+            (prod.pvp * prod.cantidad) -
+            ((prod.pvp * prod.cantidad) * (prod.descuento / 100));
+
+        subtotal += totalProducto;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+
+            
+            <td>${prod.id_producto}</td>
+            <td>${prod.descripcion}</td>
+            <td>${prod.cantidad}</td>
+            <td>${prod.costo}</td>
+            <td>${prod.pvp}</td>
+            
+        `;
+        tr.class="selected"
+        tr.setAttribute("tabindex",i);
+        const id_producto =prod.id_producto;
+        const detalle_id = prod.id;
+        prod.id = id_producto;
+        prod.detalle_id = detalle_id;
+        const obj = prod;
+        tr.object = {obj,param}
+        
+        handleSelect(tbody, tr)
+
+
+    });
+
+    /* ===== TOTALES ===== */
+   
+    div.querySelector(".spanSubTotal").innerText =`$${subtotal.toFixed(2)}`;
+
+    const inputDes = div.querySelector(".inputDes");
+    inputDes.value = data.factura_descuento || 0;
+
+    const descuento = parseFloat(inputDes.value) || 0;
+    const totalDescuento = subtotal * (descuento / 100);
+    const total = subtotal - totalDescuento;
+
+    div.querySelector(".des strong").innerText = `- $${totalDescuento.toFixed(2)}`;
+    div.querySelector(".spanTotal").innerText = `$${total.toFixed(2)}`;
 };

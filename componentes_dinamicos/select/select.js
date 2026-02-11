@@ -1,6 +1,20 @@
 import { consultaSelect } from "./controlador/consultaSelect.js";
 import { debounce } from "../tools/tools.js";
+/*const param = {
+    body: {},
 
+    contenidos: {
+        divSelect: null,
+        divFactura: document.getElementById("tablaFactura")
+    },
+
+    eventos: {
+        handleSelect: (contenedor, fila) => {
+            console.log("Seleccionado:", fila.object.obj);
+            // lógica para insertar en la factura
+        }
+    }
+};*/
 export const select = (param) => {
     const div = document.createElement("div");
     div.className = "select";
@@ -10,6 +24,7 @@ export const select = (param) => {
         <style>
             #select {
                 width: 50%;
+                color:black;
                 height: 250px;
                 border-radius: 5px;
                 background: white;

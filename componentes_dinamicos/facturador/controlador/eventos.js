@@ -4,9 +4,7 @@ import { formToJSON, tablaAJSON } from "../../tools/tools.js";
 export function handleSelect(tbody, li) {
 
     const objeto = li.object.obj
-    
     const tr = document.createElement("tr");
-   
     tr.innerHTML = `
             ${li.object.param.headers.map(header=>{
                 const booleanObjeto = objeto[header.name];
@@ -17,12 +15,14 @@ export function handleSelect(tbody, li) {
              }).join("")}
             <td id="tdAction"><i class="fa-solid fa-trash-can"></i></td>
     `
-    tr.querySelector('[name="total"]').value = tr.querySelector('[name="costo"], [name="pvp"]').value;
     const inputTotal = tr.querySelector('[name="total"]')
     const inputPvp = tr.querySelector('[name="costo"], [name="pvp"]');
     const inputCantidad = tr.querySelector('[name="cantidad"]');
     const inputDescuento = tr.querySelector('[name="descuento"]');
+    tr.querySelector('[name="total"]').value = tr.querySelector('[name="costo"], [name="pvp"]').value*inputCantidad.value;
+    
     inputCantidad.addEventListener("input", (e) => {
+        
         const resultado = inputPvp.value * e.target.value;
         inputTotal.value = resultado - (inputDescuento.value / 100 * resultado);
         changeInputs(document.getElementById("formularioFactura"))
@@ -44,6 +44,8 @@ export function handleSelect(tbody, li) {
     })
     
     tbody.append(tr);
+    const fondoOscuro = document.getElementById("fondoOscuro");
+    if(!fondoOscuro) return;
     document.getElementById("fondoOscuro").remove();
 
 
@@ -52,7 +54,7 @@ export function handleSelect(tbody, li) {
 
 
 export const changeInputs = (div)=>{
-        console.log("cambio")
+        
         let inputTotales=0;
         div.querySelectorAll('[name="total"]').forEach(input=>{
         inputTotales+=parseFloat(input.value); 
@@ -94,13 +96,13 @@ export const generarFactura =async(e,div,URL)=> {
                 
                
                 const booleanCliente = div.querySelector("form input[name='cliente']")?div.querySelector("form input[name='cliente']"):div.querySelector("form input[name='proveedor']");
-                console.log(booleanCliente);
+                
                 const objetoTipo = JSON.parse(booleanCliente.getAttribute("objeto"));
                 objetoTipo.nombre?formJson.cliente = objetoTipo :formJson.proveedor = objetoTipo;
                 
                 
                 
-                console.log(formJson);
+                
                 formJson.productos = formJson.productos.map(p => ({
                             ...p,
                             id_producto: p.id

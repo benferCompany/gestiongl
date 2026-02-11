@@ -4,6 +4,7 @@ import { obtenerTbody } from "./tablaControlador.js";
 
 export const crearFormulario = (e) => {
     e.preventDefault();
+
     crear(e);
 }
 
@@ -19,17 +20,18 @@ export const crear = async (e) => {
 
         loading(true);
         const objeto = e.target.objeto;
-        const formulario =objeto.contenido.querySelector("form");
+      
+        const formulario =objeto.jsonFormulario? JSON.stringify(objeto.jsonFormulario):new FormData(objeto.contenido.querySelector("form"));
         
         const response = await fetch(objeto.URLS.crear, {
             method: "POST",
-            body: new FormData(formulario)
+            body:formulario 
         });
         const responseJson = await response.json();
 
         if (responseJson.status == "success") {
 
-            console.log(responseJson);
+            
             const table = objeto.contenido.querySelector("table");
             objeto.data.data.push(responseJson.data);
             const tbody = await obtenerTbody(objeto);

@@ -54,7 +54,7 @@ export const contenidoPagos = (pagos) => {
 export const buttonPagos = (e) => {
     const objeto = JSON.parse(e.target.getAttribute("objeto"));
     const pagosContenido = contenidoPagos(objeto);
-    console.log(pagosContenido);
+    
     
     document.getElementById("contenido").appendChild(fondoOscuro(pagosContenido));
 }

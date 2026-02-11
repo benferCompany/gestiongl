@@ -41,7 +41,8 @@ export const navControlador = (nav) => {
                 },
                 nombre: "Facturas"
             }
-            
+
+        
             const param = {
                 botonesNombre: [eventoButton(parametro), eventoButton(venta), eventoButton(facturas)]
 

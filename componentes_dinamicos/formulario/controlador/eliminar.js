@@ -5,7 +5,7 @@ import { obtenerTbody } from "./tablaControlador.js";
 export const eliminarData = (e, json) => {
     const tr = e.closest("tr");
     const data = trAJson(tr, json)
-    console.log(data);
+    
     data.forEach(element => {
         if (element.name == "id") {
             const param = {

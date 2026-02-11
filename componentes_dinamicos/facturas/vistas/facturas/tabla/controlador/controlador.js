@@ -17,8 +17,11 @@ export const cargarTabla=async(param)=>{
 
 
 export const cargarFacturas = async (param) => {
-        param.selectValue = param.select? param.select.value:"Cliente"
+        
+        param.selectValue = param.select?param.select.value: "presupuesto";
+        
         const { data } = await getFacturas(param);
         param.factura = data;
+        
         return data;
 };

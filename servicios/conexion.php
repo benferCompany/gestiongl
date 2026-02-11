@@ -1,13 +1,11 @@
 <?php
 // Configuración de conexión
 
-/*$host = "mysql-gestionbl-benjidfer-2116.g.aivencloud.com"; // si esta del local es localhost//
-$port = 26932; // si estas de local es 3306
-$dbname = "defaultdb";
-$username = "lauty";
-$password = "root";*/
-
-
+/*$host = "localhost"; // si esta del local es localhost//
+$port = 3306; // si estas de local es 3306
+$dbname = "louzywhc_gestionbl";
+$username = "louzywhc_benfer";
+$password = "Benji-fer240212";*/
 
 /*
 $host = "localhost";
@@ -16,6 +14,9 @@ $dbname = "gestionbl";
 $username = "mygestionb03";
 $password = "Ben-fer240212" ;
 */
+
+
+
 $host = "localhost";
 $port = 3306; 
 $dbname = "gestionbl";

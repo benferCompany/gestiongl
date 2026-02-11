@@ -87,7 +87,7 @@ try {
         FROM FacturaCompra fc
         INNER JOIN Proveedor prov ON fc.id_proveedor = prov.id
         INNER JOIN Tipo_Factura tf ON fc.id_tipo_factura = tf.id
-        ORDER BY fc.id DESC
+        ORDER BY fc.id DESC LIMIT 20
     ";
 
     $stmt = $pdo->query($sql);

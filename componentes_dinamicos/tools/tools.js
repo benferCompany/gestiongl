@@ -40,7 +40,7 @@ export function tablaAJSON(tabla) {
 
       const inputEl = td.querySelector("input");
       const input = inputEl ? inputEl.value : td.innerText;
-      console.log(input);
+      
       objeto[key] = input;
     });
 
@@ -105,3 +105,33 @@ export function formularioCompleto(form) {
 }
 
 
+export const updateProduct = async (productos, url) => {
+
+  const result = await Promise.all(
+    productos.map(async (producto) => {
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: producto.id_producto })
+        });
+
+        const json = await response.json();
+
+        if (json.status !== "success") {
+          console.error("Hubo un error:", json.message);
+          return null; // 👈 clave
+        }
+        producto.pvp = parseFloat(json.data[0].pvp);
+        
+        return producto; // 👈 JSON completo
+      } catch (e) {
+        console.error("No se pudo obtener la petición:", e);
+        return null;
+      }
+    })
+  );
+
+  // 👇 eliminás los null
+  return result.filter(Boolean);
+};

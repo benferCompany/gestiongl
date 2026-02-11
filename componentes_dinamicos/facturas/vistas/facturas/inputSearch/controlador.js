@@ -6,15 +6,17 @@ export const buscar=debounce(async(param)=>{
     
     param.body = {search:param.div.querySelector("#inputSearch input").value}
     if(!param.body.search){
-        param.div.querySelector("tbody").innerHTML = "";
+       
         return;
     };
-    param.URL = param.selectValue =="Cliente"?param.URLS.buscarVenta:param.URLS.buscarCompra;
-    
+    let select = param.selectValue =="compra"? "buscarCompra":param.selectValue=="presupuesto"?"buscarPresupuesto":"buscarVenta";
+    param.URL = param.URLS[select];
+   
     const factura=  await buscarPorTexto(param)
     if(factura.status ==="success"){
 
         param.factura = factura.data;
+        
         cargarTablaPorBusqueda(param);
     }else return;
    
@@ -23,6 +25,7 @@ export const buscar=debounce(async(param)=>{
 
 
 const buscarPorTexto = async (param) => {
+   
     try {
         const response = await fetch(param.URL, {
             method: "POST",
@@ -37,6 +40,7 @@ const buscarPorTexto = async (param) => {
         }
 
         const json = await response.json();
+        console.log(json)
         return json;
 
     } catch (e) {

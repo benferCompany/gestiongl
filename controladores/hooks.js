@@ -29,6 +29,40 @@ export const consulta = async (URL) => {
 };
 
 
+
+export const consultaById = async (URL,id) => {
+  try {
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({id})
+    });
+
+    // Leer el JSON siempre, aunque el status no sea 200
+    const data = await response.json();
+
+    if (!response.ok) {
+      // Lanzar error con información del servidor
+      throw new Error(data?.message || `Error HTTP ${response.status}`);
+    }
+
+    // Retornar datos en formato consistente
+    return data;
+
+  } catch (error) {
+    console.error("Error consultando productos:", error);
+    return {
+      success: false,
+      data: null,
+      error: error.message
+    };
+  }
+};
+
+
+
 export const consultaPorTexto = async (param) => {
   try {
     const response = await fetch(param.URL, {
@@ -78,7 +112,7 @@ export const guardardarDatos = async (URL, datos) => {
       // Lanzar error con información del servidor
       throw new Error(data?.message || `Error HTTP ${response.status}`);
     }
-    console.log(data);
+    
     // Retornar datos en formato consistente
     return data;
 
@@ -177,7 +211,7 @@ export const eventoButton = (parametro) => {
 
   const button = document.createElement("button");
   button.addEventListener("click", (e) => {
-    console.log(e.target.innerText)
+    
     if (e.target.innerText == ultimoPresionado) { return };
     ultimoPresionado = e.target.innerText;
 
@@ -205,7 +239,7 @@ export const llenarFormulario = (form, datosCliente) => {
       input.value = datosCliente[key];  // asignamos el valor del JSON
     }
   });
-  console.log(form)
+  
   return form;
 
 }
@@ -228,7 +262,7 @@ export const trEnJson = (tr) => {
     paramJson[key] = value;
   });
 
-  console.log(paramJson);
+  
   return paramJson
 }
 
@@ -253,3 +287,51 @@ export function observarCambios(elemento, metodo) {
 
   return observer;
 }
+
+export const ventanaHTML = (div)=>{
+  
+  const facturaHTML = div.outerHTML;
+
+    const ventana = window.open(
+    "",
+    "_blank",
+    "width=800,height=600"
+    );
+
+    ventana.document.open();
+    ventana.document.write(`
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+    <meta charset="UTF-8">
+    <title>Factura</title>
+    <style>
+        /* acá tus estilos de impresión */
+        body {
+        font-family: Arial, sans-serif;
+        }
+    </style>
+    </head>
+    <body>
+    ${facturaHTML}
+    </body>
+    </html>
+    `);
+    ventana.document.close();
+
+    ventana.onload = () => {
+    ventana.focus();
+    ventana.print();
+    };
+
+    
+    
+    
+    /*const ventana = window.open("", "_blank");
+    ventana.document.write(factura.outerHTML);
+    ventana.document.close();
+    ventana.focus();
+    ventana.print();*/
+}
+
+    

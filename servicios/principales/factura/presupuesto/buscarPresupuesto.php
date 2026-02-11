@@ -33,11 +33,12 @@ try {
     foreach ($palabras as $i => $palabra) {
         $condiciones[] = "
             LOWER(CONCAT_WS(' ',
-                CAST(fc.id AS CHAR),
-                prov.razon_social,
-                CAST(fc.total AS CHAR),
-                CAST(fc.descuento AS CHAR),
-                fc.fecha
+                CAST(fv.id AS CHAR),
+                cli.nombre,
+                cli.apellido,
+                CAST(fv.total AS CHAR),
+                CAST(fv.descuento AS CHAR),
+                fv.fecha
             )) LIKE :p$i
         ";
         $params[":p$i"] = "%$palabra%";
@@ -45,79 +46,77 @@ try {
 
     $sql = "
         SELECT 
-            fc.id AS factura_id,
-            fc.id_proveedor,
-            prov.razon_social,
-            fc.descuento AS factura_descuento,
-            fc.total AS factura_total,
-            fc.fecha AS factura_fecha,
-            fc.id_tipo_factura,
+            fv.id AS factura_id,
+            fv.id_cliente,
+            cli.nombre,
+            cli.apellido,
+            fv.descuento AS factura_descuento,
+            fv.total AS factura_total,
+            fv.fecha AS factura_fecha,
+            fv.id_tipo_factura,
 
-
-    
-
-            -- Proveedor
+             -- Cliente 
             JSON_OBJECT(
-                'id', prov.id,
-                'razon_social', prov.razon_social,
-                'cuit', prov.cuit,
-                'nombre_contacto', prov.nombre_contacto,
-                'direccion', prov.direccion,
-                'telefono', prov.telefono
-            ) AS proveedor,
+                'id', cli.id,
+                'nombre', cli.nombre,
+                'apellido', cli.apellido,
+                'cuit', cli.cuit,
+                'direccion', cli.direccion,
+                'telefono', cli.telefono
+            ) AS cliente,
 
-            -- Detalles de compra
+            -- Detalles de factura
             (
                 SELECT CONCAT(
                     '[',
                     IFNULL(
                         GROUP_CONCAT(
                             JSON_OBJECT(
-                                'id', dc.id,
-                                'id_producto', dc.id_producto,
-                                'descripcion', dc.descripcion,
-                                'costo', dc.costo,
-                                'cantidad', dc.cantidad,
-                                'descuento', dc.descuento
+                                'id', dv.id,
+                                'id_producto', dv.id_producto,
+                                'descripcion', dv.descripcion,
+                                'cantidad', dv.cantidad,
+                                'pvp', dv.pvp,
+                                'descuento', dv.descuento
                             )
                         ),
                         ''
                     ),
                     ']'
                 )
-                FROM DetalleCompra dc
-                WHERE dc.id_factura_compra = fc.id
+                FROM DetalleVenta dv
+                WHERE dv.id_factura_venta = fv.id
             ) AS detalles,
 
-            -- Pagos a proveedor
+            -- Pagos de cliente
             (
                 SELECT CONCAT(
                     '[',
                     IFNULL(
                         GROUP_CONCAT(
                             JSON_OBJECT(
-                                'id', pp.id,
-                                'fecha', pp.fecha,
+                                'id', pc.id,
+                                'fecha', pc.fecha,
                                 'tipo_pago', JSON_OBJECT(
                                     'id', tp.id,
                                     'nombre', tp.descripcion
                                 ),
-                                'monto', pp.monto
+                                'monto', pc.monto
                             )
                         ),
                         ''
                     ),
                     ']'
                 )
-                FROM Pagos_Proveedor pp
-                INNER JOIN Tipo_Pago tp ON tp.id = pp.id_tipo_pago
-                WHERE pp.id_factura_compra = fc.id
+                FROM Pagos_Cliente pc
+                INNER JOIN Tipo_Pago tp ON tp.id = pc.id_tipo_pago
+                WHERE pc.id_factura_venta = fv.id
             ) AS pagos
 
-        FROM FacturaCompra fc
-        INNER JOIN Proveedor prov ON fc.id_proveedor = prov.id
-        WHERE " . implode(" AND ", $condiciones) . "
-        ORDER BY fc.id DESC
+        FROM FacturaVenta fv
+        INNER JOIN Cliente cli ON fv.id_cliente = cli.id
+        WHERE fv.id_tipo_factura = 2 AND " . implode(" AND ", $condiciones) . "
+        ORDER BY fv.id DESC
         LIMIT 20
     ";
 
@@ -125,9 +124,9 @@ try {
     $stmt->execute($params);
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // 🔹 Convertir JSON string a arrays reales
+    // 🔹 Convertir strings JSON a arrays reales
     foreach ($data as &$row) {
-        $row['proveedor'] = json_decode($row['proveedor'],true) ??[];
+        $row['cliente'] = json_decode($row['cliente'],true) ?? [];
         $row['detalles'] = json_decode($row['detalles'], true) ?? [];
         $row['pagos']    = json_decode($row['pagos'], true) ?? [];
     }
