@@ -44,6 +44,7 @@ export function handleSelect(tbody, li) {
     })
     
     tbody.append(tr);
+    tr.querySelector('input[name="cantidad"]').select();
     const fondoOscuro = document.getElementById("fondoOscuro");
     if(!fondoOscuro) return;
     document.getElementById("fondoOscuro").remove();

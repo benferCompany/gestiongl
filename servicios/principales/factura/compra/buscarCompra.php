@@ -4,10 +4,8 @@ include "../../../conexion.php";
 
 try {
 
-    // 🔹 Evita cortes en JSON largos
     $pdo->exec("SET SESSION group_concat_max_len = 1000000");
 
-    // 🔹 Leer JSON o POST
     $data = json_decode(file_get_contents("php://input"), true);
     if (!$data) {
         $data = $_POST;
@@ -24,7 +22,6 @@ try {
         exit;
     }
 
-    // 🔹 Separar palabras
     $palabras = preg_split('/\s+/', strtolower($busqueda));
 
     $condiciones = [];
@@ -47,14 +44,6 @@ try {
         SELECT 
             fc.id AS factura_id,
             fc.id_proveedor,
-            prov.razon_social,
-            fc.descuento AS factura_descuento,
-            fc.total AS factura_total,
-            fc.fecha AS factura_fecha,
-            fc.id_tipo_factura,
-
-
-    
 
             -- Proveedor
             JSON_OBJECT(
@@ -66,7 +55,19 @@ try {
                 'telefono', prov.telefono
             ) AS proveedor,
 
-            -- Detalles de compra
+            -- Tipo de factura
+            JSON_OBJECT(
+                'id', tf.id,
+                'tipo_factura', tf.tipo_factura
+            ) AS tipo_factura,
+
+            prov.razon_social,
+            fc.descuento AS factura_descuento,
+            fc.total AS factura_total,
+            fc.fecha AS factura_fecha,
+            fc.id_tipo_factura,
+
+            -- Detalles
             (
                 SELECT CONCAT(
                     '[',
@@ -76,8 +77,8 @@ try {
                                 'id', dc.id,
                                 'id_producto', dc.id_producto,
                                 'descripcion', dc.descripcion,
-                                'costo', dc.costo,
                                 'cantidad', dc.cantidad,
+                                'pvp', dc.costo,
                                 'descuento', dc.descuento
                             )
                         ),
@@ -89,7 +90,7 @@ try {
                 WHERE dc.id_factura_compra = fc.id
             ) AS detalles,
 
-            -- Pagos a proveedor
+            -- Pagos
             (
                 SELECT CONCAT(
                     '[',
@@ -116,6 +117,7 @@ try {
 
         FROM FacturaCompra fc
         INNER JOIN Proveedor prov ON fc.id_proveedor = prov.id
+        INNER JOIN Tipo_Factura tf ON fc.id_tipo_factura = tf.id
         WHERE " . implode(" AND ", $condiciones) . "
         ORDER BY fc.id DESC
         LIMIT 20
@@ -125,9 +127,9 @@ try {
     $stmt->execute($params);
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // 🔹 Convertir JSON string a arrays reales
     foreach ($data as &$row) {
-        $row['proveedor'] = json_decode($row['proveedor'],true) ??[];
+        $row['proveedor'] = json_decode($row['proveedor'], true) ?? [];
+        $row['tipo_factura'] = json_decode($row['tipo_factura'], true) ?? [];
         $row['detalles'] = json_decode($row['detalles'], true) ?? [];
         $row['pagos']    = json_decode($row['pagos'], true) ?? [];
     }

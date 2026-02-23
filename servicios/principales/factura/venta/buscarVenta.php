@@ -4,7 +4,6 @@ include "../../../conexion.php";
 
 try {
 
-    // 🔹 Evita cortes en JSON largos
     $pdo->exec("SET SESSION group_concat_max_len = 1000000");
 
     // 🔹 Leer JSON o POST
@@ -48,14 +47,9 @@ try {
         SELECT 
             fv.id AS factura_id,
             fv.id_cliente,
-            cli.nombre,
-            cli.apellido,
-            fv.descuento AS factura_descuento,
-            fv.total AS factura_total,
-            fv.fecha AS factura_fecha,
             fv.id_tipo_factura,
 
-             -- Cliente 
+            -- Cliente 
             JSON_OBJECT(
                 'id', cli.id,
                 'nombre', cli.nombre,
@@ -65,7 +59,17 @@ try {
                 'telefono', cli.telefono
             ) AS cliente,
 
-            -- Detalles de factura
+            -- Tipo de factura
+            JSON_OBJECT(
+                'id', tf.id,
+                'tipo_factura', tf.tipo_factura
+            ) AS tipo_factura,
+
+            fv.descuento AS factura_descuento,
+            fv.total AS factura_total,
+            fv.fecha AS factura_fecha,
+
+            -- Detalles
             (
                 SELECT CONCAT(
                     '[',
@@ -78,7 +82,7 @@ try {
                                 'cantidad', dv.cantidad,
                                 'pvp', dv.pvp,
                                 'descuento', dv.descuento
-                            )
+                            ) SEPARATOR ','
                         ),
                         ''
                     ),
@@ -88,7 +92,7 @@ try {
                 WHERE dv.id_factura_venta = fv.id
             ) AS detalles,
 
-            -- Pagos de cliente
+            -- Pagos
             (
                 SELECT CONCAT(
                     '[',
@@ -102,7 +106,7 @@ try {
                                     'nombre', tp.descripcion
                                 ),
                                 'monto', pc.monto
-                            )
+                            ) SEPARATOR ','
                         ),
                         ''
                     ),
@@ -115,6 +119,8 @@ try {
 
         FROM FacturaVenta fv
         INNER JOIN Cliente cli ON fv.id_cliente = cli.id
+        INNER JOIN Tipo_Factura tf ON fv.id_tipo_factura = tf.id
+
         WHERE " . implode(" AND ", $condiciones) . "
         ORDER BY fv.id DESC
         LIMIT 20
@@ -122,18 +128,19 @@ try {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // 🔹 Convertir strings JSON a arrays reales
-    foreach ($data as &$row) {
-        $row['cliente'] = json_decode($row['cliente'],true) ?? [];
+    // 🔹 Convertir JSON string a arrays reales
+    foreach ($result as &$row) {
+        $row['cliente'] = json_decode($row['cliente'], true) ?? [];
+        $row['tipo_factura'] = json_decode($row['tipo_factura'], true) ?? [];
         $row['detalles'] = json_decode($row['detalles'], true) ?? [];
-        $row['pagos']    = json_decode($row['pagos'], true) ?? [];
+        $row['pagos'] = json_decode($row['pagos'], true) ?? [];
     }
 
     echo json_encode([
         "status" => "success",
-        "data"   => $data
+        "data"   => $result
     ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
 } catch (PDOException $e) {

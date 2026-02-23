@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO SHOPS · ELECTRICIDAD PROFESIONAL</title>
+    <!-- Fuente moderna y profesional -->
+    <link rel="stylesheet" href="../frontend/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- BARRA SUPERIOR -->
+    <div class="top-oferta">
+        <marquee direction="left" scrollamount="6">⚡ TODO SHOPS · MATERIAL ELÉCTRICO PROFESIONAL · 15% OFF EN
+            ILUMINACIÓN LED · ENVÍOS A OBRA ⚡</marquee>
+    </div>
+
+    <!-- HEADER con menú y carrito -->
+    <header id="header">
+        <div class="header-left">
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+            <h1>TODO SHOPS</h1>
+        </div>
+        <div class="carrito-icono" id="carritoIcono">
+            <span>🛒</span>
+            <span id="contador-carrito">0</span>
+        </div>
+    </header>
+
+    <!-- NAV LATERAL (categorías) -->
+    <nav class="nav-lateral" id="navLateral">
+        <div class="nav-header">
+            <h2>⚡ Categorías</h2>
+            <p>Especialidades técnicas</p>
+        </div>
+        <ul>
+            <li>💡 Iluminación LED / Focos</li>
+            <li>🔌 Cables y alargadores</li>
+            <li>🔋 Baterías / Pilas</li>
+            <li>🧰 Herramientas eléctricas</li>
+            <li>📦 Accesorios industriales</li>
+            <li>⚙️ Automatización</li>
+            <li>📟 Medidores y testers</li>
+            <li>🔒 Seguridad eléctrica</li>
+        </ul>
+        <div class="nav-footer">
+            📍 Envíos a obra en 24h<br>
+            ⚡ Asesoramiento online gratis
+        </div>
+    </nav>
+
+    <!-- Overlay (fondo oscuro) -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- PANEL LATERAL DEL CARRITO -->
+    <div class="carrito-panel" id="carritoPanel">
+        <div class="carrito-header">
+            <h3>🛒 Tu pedido</h3>
+            <button class="cerrar-carrito" id="cerrarCarrito">✕</button>
+        </div>
+        <div class="carrito-items" id="carritoItems">
+            <!-- Los productos agregados se renderizan aquí dinámicamente -->
+            <div class="carrito-vacio">Aún no has agregado productos</div>
+        </div>
+        <div class="carrito-footer">
+            <div class="carrito-total">
+                <span>Total</span>
+                <span id="totalCarrito">$0</span>
+            </div>
+            <button class="btn-finalizar" id="finalizarCompra">Finalizar compra</button>
+        </div>
+    </div>
+
+    <!-- PORTADA -->
+    <aside id="portada">
+        <h2>Profesionales en electricidad <span>#confianza</span></h2>
+        <p>🔌 Material eléctrico certificado, iluminación LED de alta eficiencia, cableado industrial y doméstico.
+            Asesoramiento técnico y envíos a todo el país.</p>
+        <input type="text" name="" id="idSearch" placeholder="Buscar Productos....">
+    </aside>
+
+    <!-- PRODUCTOS -->
+    <main id="contenido">
+        <section id="article">
+            <!-- Los productos tienen data-precio para el carrito Estructura
+            <div class="producto-card" data-nombre="Foco LED 20W" data-precio="3490">
+                <span class="producto-badge">Oferta</span>
+                <div class="producto-imagen">💡</div>
+                <h3>Foco LED</h3>
+                <div class="producto-detalle">20W · 6500K · E27</div>
+                <div class="producto-precio">$3.490</div>
+                <button class="btn-accion agregar-carrito">Agregar</button>
+            </div> -->
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="footer">
+        <p>&copy; 2024 TODO SHOPS · ELECTRICIDAD PROFESIONAL · Calidad certificada</p>
+        <p style="font-size:0.85rem; opacity:0.8; margin-top:0.6rem;">⚡ asesoramiento técnico online · envíos a obra ·
+            +56 9 1234 5678</p>
+    </footer>
+
+    <script type="module" src="../frontend/main.js"></script>
+    <script type="module" src="../backend/controlador.js"></script>
+</body>
+
+</html>

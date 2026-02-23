@@ -3,6 +3,9 @@ import { crearFormulario } from "../../../../componentes_dinamicos/formulario/co
 import { eventoSubmit } from "../../../../componentes_dinamicos/formulario/controlador/editar.js";
 import { URL } from "../../../../controladores/url/url.js";
 
+
+
+export const contenidoProducto = () => {
 const json = {
     content: [
         { header: "Id", name: "id", type: "text" },
@@ -36,9 +39,6 @@ const json = {
 
 
 }
-
-
-export const contenidoProducto = () => {
 
     contenido(json);
 }

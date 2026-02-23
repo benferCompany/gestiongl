@@ -67,13 +67,13 @@ export const factura = (param) => {
             <div class="tablas">
                 <table>
                     <colgroup>
-                        <col style="width:10%">
+                        <col style="width:auto">
                         <col style="width:40%">
-                        <col style="width:10%">
-                        <col style="width:10%">
-                        <col style="width:10%">
-                        <col style="width:10%">
-                        <col style="width:10%">
+                        <col style="width:auto">
+                        <col style="width:auto">
+                        <col style="width:auto">
+                        <col style="width:auto">
+                        <col style="width:auto">
                     </colgroup>
                     <thead>
                         <tr>

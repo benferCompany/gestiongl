@@ -196,3 +196,4 @@ CREATE TABLE Balance (
     CONSTRAINT fk_balance_capital
         FOREIGN KEY (id_capital) REFERENCES Capital(id)
 );
+

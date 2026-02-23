@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>FreeImage API Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f4f6f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        input {
+            padding: 8px;
+        }
+
+        .imagenes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 200px);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        .delete-btn {
+            background: red;
+            margin-top: 5px;
+        }
+
+    </style>
+    
+</head>
+<body>
+
+<h1>Gestión de Imágenes - FreeImage.host</h1>
+
+<div class="box">
+    <input type="file" id="imageInput">
+    <button onclick="subirImagen()">Subir Imagen</button>
+</div>
+
+<script>
+
+
+
+async function subirImagen() {
+    const fileInput = document.getElementById("imageInput");
+    const file = fileInput.files[0];
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch("http://localhost/TIENDALB/imagenes/upload.php", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await response.json();
+    console.log(data);
+    if(data.status_code!=200) return;
+    
+    const image = {
+        nombre: "Captura",
+        objeto: JSON.stringify({
+            title :data.image.title,
+            image: data.image.image,
+            medium: data.image.medium,
+            thumb: data.image.thumb
+        }),
+        orden:1
+    }
+    guardarImage(image);
+}
+
+
+const guardarImage =async(objeto)=>{
+    try{
+
+        const response = await fetch("/servicios/tienda/producto/imagenes/crear.php",{
+            method:"POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(objeto)
+        });
+        const json = await response.json();
+        if(json.status !="success") return;
+        console.log(json);
+    }catch(e){
+        console.error("Hubo un error al crear imagen",e);
+    }
+}
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <div class="importer">
+    <h2>Importar productos desde Excel</h2>
+
+    <input type="file" id="excelFile" accept=".xlsx,.xls" />
+
+    <div id="mapping" style="display:none">
+        <h3 style="grid-column: span 2">Mapeo de columnas</h3>
+
+        <label>ID Producto</label>
+        <select id="map_id_producto"></select>
+
+        <label>Descripción</label>
+        <select id="map_descripcion"></select>
+
+        <label>Costo</label>
+        <select id="map_costo"></select>
+
+        <label>PVP</label>
+        <select id="map_pvp"></select>
+
+        <button id="procesar">Procesar Excel</button>
+    </div>
+
+    <pre id="output"></pre>
+</div>
+
+</body>
+
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script type="module" src="js.js"></script>
+
+
+</html>

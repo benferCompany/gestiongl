@@ -3,7 +3,11 @@ import { crearFormulario } from "../../../../componentes_dinamicos/formulario/co
 import { eventoSubmit } from "../../../../componentes_dinamicos/formulario/controlador/editar.js";
 import { URL } from "../../../../controladores/url/url.js";
 
-const json = {
+
+
+export const contenidoStock = () => {
+
+    const json = {
     content: [
         { header: "Id", name: "id", type:"number" },
         { header: "Producto Id", name: "producto_id", type: "text", tipo:"select", accion:"buscarProducto", llaveMostrar:"descripcion"},
@@ -50,7 +54,5 @@ const json = {
 
 
 }
-
-export const contenidoStock = () => {
     contenido(json)
 }

@@ -8,7 +8,7 @@ import { obtenerTbody } from "./tablaControlador.js";
 export const editar = (e, json) => {
     json.content = trAJson(e.closest("tr"), json)
     const form = formulario(json);
-
+    
     json.contenido.append(fondoOscuro(form))
 
 

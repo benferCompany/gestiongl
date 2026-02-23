@@ -38,6 +38,7 @@ export const fondoOscuro = (contenido) => {
 
     div.addEventListener("click", (e)=>{
         if(e.target.id =="fondoOscuro")
+            
             e.target.remove()
     })
 

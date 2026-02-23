@@ -3,6 +3,7 @@ import { jsSelectInputCliente } from "../../select/controlador/jsSelectInput.js"
 
 
 export const formulario = (parametros) => {
+    
     const formulario = document.createElement("form");
     formulario.className = "formulario";
     formulario.objeto = parametros;
@@ -10,7 +11,6 @@ export const formulario = (parametros) => {
     let content = parametros.content
     let evento = parametros.eventos.editar;
     const booleanForm = parametros.content.some(obj => "value" in obj);
-    
     if (booleanForm) {
 
     } else {
@@ -60,7 +60,7 @@ export const formulario = (parametros) => {
             e.preventDefault();
         }
     });
-    
+
     return formulario;
 }
 

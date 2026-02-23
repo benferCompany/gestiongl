@@ -20,6 +20,7 @@ export const crear = async (e) => {
 
         loading(true);
         const objeto = e.target.objeto;
+        console.log(objeto)
       
         const formulario =objeto.jsonFormulario? JSON.stringify(objeto.jsonFormulario):new FormData(objeto.contenido.querySelector("form"));
         

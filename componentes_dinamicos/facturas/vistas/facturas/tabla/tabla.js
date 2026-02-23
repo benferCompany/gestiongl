@@ -1,5 +1,5 @@
 
-import { crearFacturaHTML } from "../../../../print/controlador/controlador.js";
+import { crearFacturaHTML, crearHTMLTicket } from "../../../../print/controlador/controlador.js";
 import { buttonPagos } from "../../pagos.js";
 import { paramPresupuesto } from "../controlador/jsonPresupuesto.js";
 import { cssFacturas } from "./style/cssTable.js";
@@ -91,7 +91,11 @@ export const tablaFacturas = (param) => {
                  fecha: objeto.factura_fecha,
                  id_factura_cliente: objeto.factura_id
                 };
-            
+            console.log(updateObjeto)
+            if(updateObjeto.tipo_factura.tipo_factura=="T"){
+                crearHTMLTicket(updateObjeto);
+                return;
+            }
             crearFacturaHTML(updateObjeto);
         });
     });

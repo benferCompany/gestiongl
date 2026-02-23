@@ -1,0 +1,126 @@
+/* Reset suave */
+* {
+    box-sizing: border-box;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* Fondo general */
+body {
+    margin: 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+    color: #1f2937;
+}
+
+/* Contenedor principal */
+.importer {
+    max-width: 720px;
+    margin: auto;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.08),
+        0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+/* Títulos */
+.importer h2,
+.importer h3 {
+    margin-top: 0;
+    font-weight: 600;
+}
+
+/* Input file */
+input[type="file"] {
+    width: 100%;
+    padding: 1rem;
+    border: 2px dashed #c7d2fe;
+    border-radius: 12px;
+    background: #eef2ff;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+input[type="file"]:hover {
+    background: #e0e7ff;
+    border-color: #6366f1;
+}
+
+/* Sección de mapeo */
+#mapping {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+/* Labels */
+#mapping label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Selects */
+select {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+select:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+/* Botón */
+button {
+    margin-top: 1.5rem;
+    padding: 0.9rem 1.2rem;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Output JSON */
+pre {
+    margin-top: 2rem;
+    background: #0f172a;
+    color: #e5e7eb;
+    padding: 1.2rem;
+    border-radius: 12px;
+    max-height: 320px;
+    overflow: auto;
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (min-width: 640px) {
+    #mapping {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    button {
+        grid-column: span 2;
+    }
+}

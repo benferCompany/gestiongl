@@ -151,7 +151,8 @@ body {
 
 /* Contenedor de tablas - SIN DESBORDAMIENTO */
 .padre .tablas {
-    width: 100%;
+    width: auto;          /* Se ajusta al contenido */
+    table-layout: auto; 
     max-width: 900px;
     background-color: var(--bg-container);
     border-radius: 16px;
@@ -189,7 +190,7 @@ body {
 }
 
 .padre td {
-    padding: 18px 15px;
+    
     text-align: center;
     border-bottom: 1px solid var(--border-color);
     color: var(--mp-light-gray);

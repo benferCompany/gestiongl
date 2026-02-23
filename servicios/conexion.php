@@ -1,42 +1,40 @@
 <?php
-// Configuración de conexión
+// ===================
+// CORS
+// ===================
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json; charset=UTF-8");
 
-/*$host = "localhost"; // si esta del local es localhost//
-$port = 3306; // si estas de local es 3306
-$dbname = "louzywhc_gestionbl";
-$username = "louzywhc_benfer";
-$password = "Benji-fer240212";*/
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
-/*
+// ===================
+// DB
+// ===================
 $host = "localhost";
-$port = 3306; 
-$dbname = "gestionbl";
-$username = "mygestionb03";
-$password = "Ben-fer240212" ;
-*/
-
-
-
-$host = "localhost";
-$port = 3306; 
+$port = 3306;
 $dbname = "gestionbl";
 $username = "root";
-$password = "" ;
+$password = "";
 
 try {
-    // Crear conexión con PDO
-    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
-
-
-    // Configurar para que PDO lance excepciones si hay errores
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+    $pdo = new PDO(
+        "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8",
+        $username,
+        $password,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]
+    );
 } catch (PDOException $e) {
-    // Si hay error en la conexión, salir y devolver JSON
-    header("Content-Type: application/json; charset=UTF-8");
+    http_response_code(500);
     echo json_encode([
         "status" => "error",
-        "message" => "Error de conexión: " . $e->getMessage()
+        "message" => "Error de conexión"
     ]);
     exit;
 }

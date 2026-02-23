@@ -20,5 +20,5 @@ export const contenido = async (json) => {
     div.append(await table(json))
     json.contenido.append(div);
      div.childNodes.forEach(e=>e.style="flex-basis:200; margin:1em;")
- 
+    console.log(json)
 }
