@@ -1,4 +1,4 @@
-import { URL } from "../../controladores/url/url.js";
+
 
 let excelData = [];
 
@@ -68,7 +68,7 @@ const crearProductosSecuencialmente = async (productos) => {
 
   for (const producto of productos) {
     try {
-      const response = await fetch(URL + "/servicios/principales/inventario/producto/crear.php", {
+      const response = await fetch("/servicios/principales/inventario/producto/crear.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(producto)
