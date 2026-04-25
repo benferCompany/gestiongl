@@ -1,7 +1,5 @@
 <?php
-// ===================
-// CORS
-// ===================
+
 $allowed_origins = [
     'https://gestionimportexcel.todoelectro.store',
     'https://todoelectro.store'
