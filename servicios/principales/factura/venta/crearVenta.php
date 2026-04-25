@@ -50,8 +50,8 @@ try {
     if (!empty($data['pagos'])) {
         $stmtPago = $pdo->prepare("
             INSERT INTO Pagos_Cliente
-            (id_factura_venta, fecha, id_tipo_pago, monto)
-            VALUES (?, ?, ?, ?)
+            (id_factura_venta, fecha, id_tipo_pago, monto, monto_final)
+            VALUES (?, ?, ?, ?,?)
         ");
 
         foreach ($data['pagos'] as $pago) {
@@ -59,7 +59,8 @@ try {
                 $facturaId,
                 $pago['fecha'],
                 $pago['id_tipo_pago'],
-                $pago['monto']
+                $pago['monto'],
+                $pago['monto_final']
             ]);
         }
     }

@@ -141,7 +141,7 @@ export const factura = (param) => {
         div.querySelector(".spanTotal").innerText = `$${total.toFixed(2)}`;
     };
 
-    div.querySelector(".inputDes").addEventListener("change", recalcular);
+    div.querySelector(".inputDes").addEventListener("input", recalcular);
 
     /* ===============================
        TECLADO (UN SOLO HANDLER)

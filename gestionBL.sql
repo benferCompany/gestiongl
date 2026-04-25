@@ -127,6 +127,7 @@ CREATE TABLE Pagos_Cliente (
     id_tipo_pago INT NOT NULL,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     monto DECIMAL(10,2) NOT NULL,
+    monto_final DECIMAL(10,2) NOT NULL,
 
     CONSTRAINT fk_pc_factura
         FOREIGN KEY (id_factura_venta) REFERENCES FacturaVenta(id),

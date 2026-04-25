@@ -33,6 +33,8 @@ body {
     overflow-x: hidden;
 }
 
+
+
 .padre {
     padding-top: 20px;
     display: flex;
@@ -479,5 +481,8 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--mp-blue);
 }
+
+
+
     </style> `;
 };

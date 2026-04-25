@@ -1,4 +1,5 @@
 
+import { mostrarAlerta } from "../../../vistas/componentes/alertas.js";
 import { formToJSON, tablaAJSON } from "../../tools/tools.js";
 
 export function handleSelect(tbody, li) {
@@ -60,7 +61,7 @@ export const changeInputs = (div)=>{
         div.querySelectorAll('[name="total"]').forEach(input=>{
         inputTotales+=parseFloat(input.value); 
     })
-    div.querySelector(".sbt").querySelector("span").innerHTML = "$"+inputTotales;
+    div.querySelector(".sbt").querySelector("span").innerHTML = "$"+inputTotales.toFixed(2);
     inputFormulario(div)
 }
 
@@ -80,6 +81,7 @@ export const changeInputs = (div)=>{
 
 
 export const generarFactura =async(e,div,URL)=> {
+                if(document.body.querySelector("#fondoOscuroSinEsc")) return;
                 if(e instanceof PointerEvent){
                     e.preventDefault()
                     div = e.target.closest(".form").parentNode;
@@ -99,6 +101,14 @@ export const generarFactura =async(e,div,URL)=> {
                 const booleanCliente = div.querySelector("form input[name='cliente']")?div.querySelector("form input[name='cliente']"):div.querySelector("form input[name='proveedor']");
                 
                 const objetoTipo = JSON.parse(booleanCliente.getAttribute("objeto"));
+                if(!objetoTipo){
+                    mostrarAlerta({
+                                    color: "#1e293b",
+                                    background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)",
+                                    mensaje:"Debes llenar todo los campos"
+                            })
+                    return
+                }
                 objetoTipo.nombre?formJson.cliente = objetoTipo :formJson.proveedor = objetoTipo;
                 
                 

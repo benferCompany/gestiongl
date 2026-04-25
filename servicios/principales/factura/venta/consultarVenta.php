@@ -68,7 +68,8 @@ try {
                                     'id', tp.id,
                                     'nombre', tp.descripcion
                                 ),
-                                'monto', pc.monto
+                                'monto', pc.monto,
+                                'monto_final', pc.monto_final
                             ) SEPARATOR ','
                         ),
                         ''
@@ -83,7 +84,8 @@ try {
         FROM FacturaVenta fv
         INNER JOIN Cliente cli ON fv.id_cliente = cli.id
         INNER JOIN Tipo_Factura tf ON fv.id_tipo_factura = tf.id
-        ORDER BY fv.id DESC LIMIT 20
+        WHERE fv.id_tipo_factura != 2  /* 🔥 EXCLUIR FACTURAS TIPO 2 */
+        ORDER BY fv.id DESC
     ";
 
     $stmt = $pdo->query($sql);

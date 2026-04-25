@@ -4,7 +4,7 @@ export const stylePrint = `
     
     
     @top-center {
-        content: "Factura";
+        
         font-family: Arial, sans-serif;
         font-size: 9pt;
         color: #666;
@@ -41,7 +41,7 @@ export const stylePrint = `
 }
 
 .pagina::before {
-    content: "FACTURA";
+   
     position: absolute;
     top: 50%;
     left: 50%;

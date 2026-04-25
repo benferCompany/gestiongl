@@ -43,6 +43,9 @@ try {
         $params[":p$i"] = "%$palabra%";
     }
 
+    // 🔥 EXCLUIR FACTURAS CON TIPO 2
+    $condiciones[] = " fv.id_tipo_factura != 2 ";
+
     $sql = "
         SELECT 
             fv.id AS factura_id,

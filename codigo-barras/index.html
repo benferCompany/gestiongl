@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Generador de Códigos de Barras | Vista previa de impresión corregida</title>
+  <!-- JsBarcode: biblioteca robusta para códigos de barras -->
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #eef2f7 0%, #dce5ef 100%);
+      min-height: 100vh;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app-container {
+      max-width: 1400px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 2rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .header {
+      background: #0f2b3d;
+      padding: 1.4rem 2rem;
+      color: white;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .header h1 span {
+      background: #f39c12;
+      padding: 0.2rem 0.9rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .sub {
+      margin-top: 0.4rem;
+      opacity: 0.85;
+      font-size: 0.85rem;
+    }
+
+    /* Panel de controles */
+    .control-panel {
+      padding: 1.8rem 2rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e4e9f0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: flex-end;
+    }
+
+    .input-group {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .input-group label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+      color: #1e2f3e;
+      font-size: 0.8rem;
+      letter-spacing: 0.3px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 2px solid #cbd8e6;
+      border-radius: 1rem;
+      transition: 0.2s;
+      background: #fff;
+    }
+
+    .input-group input:focus {
+      border-color: #2c7da0;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.2);
+    }
+
+    .quantity-box {
+      max-width: 150px;
+    }
+
+    .btn-generate {
+      background: #0f2b3d;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 2rem;
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn-generate:hover {
+      background: #1f4e6e;
+      transform: scale(0.98);
+    }
+
+    /* Área de resultados */
+    .results-area {
+      padding: 2rem;
+      background: #f9fbfd;
+    }
+
+    .info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.8rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px dashed #cbdde9;
+    }
+
+    .badge {
+      background: #eef2f8;
+      padding: 0.4rem 1rem;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .btn-print-all {
+      background: transparent;
+      border: 1.5px solid #2c7da0;
+      padding: 0.45rem 1.3rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #1f5e7e;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-print-all:hover {
+      background: #e3f0f5;
+      border-color: #0f2b3d;
+    }
+
+    /* Grid de códigos de barras */
+    .barcode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .barcode-card {
+      background: white;
+      border-radius: 1.2rem;
+      padding: 1.2rem 0.8rem 1rem 0.8rem;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      border: 1px solid #e2edf2;
+      transition: 0.1s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .barcode-svg-container {
+      background: #fff;
+      padding: 0.5rem;
+      margin: 0.3rem 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    canvas, svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .barcode-value {
+      font-weight: 700;
+      font-size: 0.9rem;
+      background: #eef3fc;
+      padding: 0.3rem 0.9rem;
+      border-radius: 60px;
+      margin: 0.7rem 0 0.3rem;
+      font-family: monospace;
+      word-break: break-all;
+    }
+
+    .index-badge {
+      font-size: 0.7rem;
+      background: #d9e6f5;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+      color: #0f3b4f;
+      margin-bottom: 0.3rem;
+      align-self: flex-start;
+    }
+
+    .btn-single-print {
+      background: none;
+      border: none;
+      font-size: 0.7rem;
+      margin-top: 0.6rem;
+      cursor: pointer;
+      color: #2c7da0;
+      text-decoration: underline;
+      opacity: 0.8;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background: #f1f6fa;
+      border-radius: 1.8rem;
+      color: #2c5a6e;
+    }
+
+    .error-msg {
+      background: #ffe0db;
+      color: #b13a2d;
+      border-radius: 2rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 0.9rem;
+      font-size: 0.7rem;
+      color: #6a7c8f;
+      border-top: 1px solid #e2eaf1;
+      background: #ffffffcc;
+    }
+
+    @media (max-width: 640px) {
+      .control-panel {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .quantity-box {
+        max-width: 100%;
+      }
+      .btn-generate {
+        justify-content: center;
+      }
+      .barcode-grid {
+        gap: 1rem;
+      }
+    }
+
+    /* IMPORTANTE: estilos para impresión - garantiza que se vean los canvas */
+    @media print {
+      body {
+        background: white;
+        padding: 0.2in;
+        margin: 0;
+      }
+      .control-panel, .info-bar .btn-print-all, .btn-single-print, footer, .btn-generate, .header .sub {
+        display: none !important;
+      }
+      .results-area {
+        padding: 0;
+        background: white;
+      }
+      .barcode-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #ccc;
+        box-shadow: none;
+        background: white;
+      }
+      .barcode-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1rem;
+      }
+      canvas {
+        /* Asegura que el canvas se renderice correctamente en la impresión */
+        border: 0;
+        max-width: 100%;
+        height: auto;
+      }
+      .barcode-value {
+        background: #f5f5f5;
+        color: black;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <div class="header">
+    <h1>
+      🏷️ Generador de Códigos de Barras
+      <span>Múltiples copias</span>
+    </h1>
+    <div class="sub">Ingresa un código y la cantidad deseada. Cada copia se genera individualmente.</div>
+  </div>
+
+  <div class="control-panel">
+    <div class="input-group">
+      <label>📦 Código (texto o número)</label>
+      <input type="text" id="barcodeValue" placeholder="Ej: codigo, ART-998, 12345678" autocomplete="off" value="">
+    </div>
+    <div class="input-group quantity-box">
+      <label>🔢 Cantidad de etiquetas</label>
+      <input type="number" id="quantity" min="1" max="120" value="1" step="1">
+    </div>
+    <button class="btn-generate" id="generateBtn">
+      ✨ Generar Códigos
+    </button>
+  </div>
+
+  <div class="results-area">
+    <div class="info-bar" id="infoBar" style="display: none;">
+      <div class="badge" id="statsBadge"></div>
+      <button class="btn-print-all" id="printAllBtn">🖨️ Imprimir todos los códigos</button>
+    </div>
+    <div id="barcodeContainer" class="barcode-grid">
+      <div class="empty-state">
+        🧾 Ingresa un código y una cantidad, luego presiona "Generar".<br>
+        Se mostrarán todas las etiquetas con código de barras.
+      </div>
+    </div>
+  </div>
+  <footer>
+    ✅ Código de barras estándar CODE128 (alfanumérico). Haz clic en "Imprimir esta etiqueta" para cada una, o Imprimir todos. <br>
+    <strong>Nota:</strong> La vista previa de impresión ahora muestra los códigos correctamente (canvas regenerados).
+  </footer>
+</div>
+
+<script>
+  (function() {
+    // Elementos
+    const codeInput = document.getElementById('barcodeValue');
+    const quantityInput = document.getElementById('quantity');
+    const generateBtn = document.getElementById('generateBtn');
+    const container = document.getElementById('barcodeContainer');
+    const infoBar = document.getElementById('infoBar');
+    const statsBadge = document.getElementById('statsBadge');
+    const printAllBtn = document.getElementById('printAllBtn');
+
+    // Función auxiliar de validación
+    function isValidCode(str) {
+      if (!str || str.trim() === "") return false;
+      if (str.length > 80) return false;
+      // Evitar caracteres demasiado raros pero CODE128 soporta ASCII imprimible
+      return true;
+    }
+
+    // Función para dibujar un código de barras en un canvas de forma SEGURA y devolver el canvas
+    // Se usa tanto para generar tarjeta como para regenerar en clones de impresión
+    function renderBarcodeOnCanvas(canvasElement, codeValue) {
+      return new Promise((resolve) => {
+        try {
+          JsBarcode(canvasElement, codeValue, {
+            format: "CODE128",
+            lineColor: "#000000",
+            width: 2,
+            height: 55,
+            displayValue: false,   // Nosotros mostraremos el texto aparte
+            margin: 8,
+            background: "#ffffff"
+          });
+          resolve(true);
+        } catch (err) {
+          console.warn("Error renderizando barcode:", err);
+          // Mostrar mensaje de error suave
+          const parent = canvasElement.parentElement;
+          const errSpan = document.createElement('div');
+          errSpan.className = 'error-msg';
+          errSpan.style.fontSize = '0.7rem';
+          errSpan.style.marginTop = '5px';
+          errSpan.textContent = '⚠️ Código inválido';
+          if (parent && !parent.querySelector('.error-msg')) parent.appendChild(errSpan);
+          resolve(false);
+        }
+      });
+    }
+
+    // Construir una tarjeta individual con Canvas y regeneración segura
+    async function buildBarcodeCard(codeValue, index, total) {
+      const card = document.createElement('div');
+      card.className = 'barcode-card';
+      
+      // Índice visual
+      const idxSpan = document.createElement('div');
+      idxSpan.className = 'index-badge';
+      idxSpan.textContent = `Copia ${index + 1} de ${total}`;
+      card.appendChild(idxSpan);
+      
+      // Contenedor para canvas
+      const canvasContainer = document.createElement('div');
+      canvasContainer.className = 'barcode-svg-container';
+      const canvas = document.createElement('canvas');
+      canvas.width = 300;
+      canvas.height = 80;
+      canvas.style.maxWidth = '100%';
+      canvas.style.height = 'auto';
+      canvasContainer.appendChild(canvas);
+      card.appendChild(canvasContainer);
+      
+      // Texto del código
+      const codeSpan = document.createElement('div');
+      codeSpan.className = 'barcode-value';
+      codeSpan.textContent = codeValue;
+      card.appendChild(codeSpan);
+      
+      // Botón imprimir individual
+      const printBtn = document.createElement('button');
+      printBtn.className = 'btn-single-print';
+      printBtn.textContent = '🖨️ Imprimir esta etiqueta';
+      card.appendChild(printBtn);
+      
+      // Renderizamos el código en el canvas
+      await renderBarcodeOnCanvas(canvas, codeValue);
+      
+      // Evento de impresión individual CORREGIDO (regenera correctamente el canvas para impresión)
+      printBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await printSingleCardWithCanvas(codeValue, index, total);
+      });
+      
+      return card;
+    }
+    
+    // Función mejorada para impresión individual: asegura que el código de barras se vea en la vista previa
+    async function printSingleCardWithCanvas(codeValue, index, total) {
+      // Crear un contenedor para la ventana de impresión
+      const printWindow = window.open('', '_blank', 'width=550,height=500,scrollbars=yes');
+      if (!printWindow) {
+        alert("Por favor, permite ventanas emergentes para la impresión.");
+        return;
+      }
+      
+      // Generamos el HTML con un canvas nuevo dentro y aseguramos que JsBarcode lo dibuje ANTES de la impresión
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Imprimir código: ${codeValue}</title>
+          <meta charset="UTF-8">
+          <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"><\/script>
+          <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            body {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              min-height: 100vh;
+              background: white;
+              font-family: system-ui, sans-serif;
+              margin: 0;
+              padding: 1rem;
+            }
+            .print-card {
+              max-width: 380px;
+              margin: 0 auto;
+              text-align: center;
+              border: 1px solid #ccc;
+              border-radius: 1rem;
+              padding: 1.2rem;
+              background: white;
+              page-break-after: avoid;
+              break-inside: avoid;
+            }
+            .barcode-canvas {
+              max-width: 100%;
+              margin: 0.5rem 0;
+            }
+            .code-text {
+              font-weight: bold;
+              font-family: monospace;
+              background: #f0f0f0;
+              display: inline-block;
+              padding: 0.3rem 1rem;
+              border-radius: 40px;
+              margin-top: 0.8rem;
+              font-size: 0.9rem;
+            }
+            .label-index {
+              font-size: 0.7rem;
+              color: #2c5e7a;
+              margin-bottom: 0.5rem;
+            }
+            @media print {
+              body {
+                padding: 0.2in;
+              }
+              .print-card {
+                border: 1px solid #aaa;
+                box-shadow: none;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-card">
+            <div class="label-index">Todo-Electro</div>
+            <canvas id="barcodeCanvasPrint" class="barcode-canvas" width="320" height="80" style="width:100%; height:auto;"></canvas>
+            <div class="code-text">${escapeHtml(codeValue)}</div>
+          </div>
+          <script>
+            // Esperamos a que el DOM cargue y dibujamos el código de barras en el canvas
+            window.onload = function() {
+              var canvasElem = document.getElementById('barcodeCanvasPrint');
+              if (canvasElem) {
+                try {
+                  JsBarcode(canvasElem, "${escapeHtml(codeValue)}", {
+                    format: "CODE128",
+                    lineColor: "#000000",
+                    width: 2,
+                    height: 60,
+                    displayValue: false,
+                    margin: 8,
+                    background: "#ffffff"
+                  });
+                  // Tras dibujar, lanzamos la impresión
+                  window.print();
+                  // Cerramos ventana después de imprimir (o cancelar)
+                  setTimeout(() => window.close(), 500);
+                } catch(e) {
+                  document.body.innerHTML += "<p style='color:red;'>Error al generar código de barras</p>";
+                  window.print();
+                }
+              } else {
+                window.print();
+              }
+            };
+          <\/script>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+    
+    // Función de escape para inyección segura
+    function escapeHtml(str) {
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+        return c;
+      });
+    }
+    
+    // Limpiar y generar múltiples códigos
+    async function generateMultipleBarcodes() {
+      let rawCode = codeInput.value;
+      let quantity = parseInt(quantityInput.value, 10);
+      
+      if (isNaN(quantity) || quantity < 1) {
+        quantity = 1;
+        quantityInput.value = 1;
+      }
+      if (quantity > 120) {
+        quantity = 120;
+        quantityInput.value = 120;
+        showTemporaryMessage("Límite máximo 120 códigos", "warn");
+      }
+      const trimmedCode = rawCode.trim();
+      if (!isValidCode(trimmedCode)) {
+        showEmptyError("Código inválido. Debe tener al menos 1 carácter y máximo 80. Evite solo espacios.");
+        infoBar.style.display = "none";
+        return;
+      }
+      
+      // Limpiar contenedor y mostrar estado de carga (opcional)
+      container.innerHTML = '';
+      // Mostrar mensaje temporal de generación
+      const loadingMsg = document.createElement('div');
+      loadingMsg.className = 'empty-state';
+      loadingMsg.textContent = '⏳ Generando códigos de barras...';
+      container.appendChild(loadingMsg);
+      
+      // Generación asíncrona de todas las tarjetas
+      const fragment = document.createDocumentFragment();
+      let successCount = 0;
+      
+      for (let i = 0; i < quantity; i++) {
+        try {
+          const card = await buildBarcodeCard(trimmedCode, i, quantity);
+          fragment.appendChild(card);
+          successCount++;
+        } catch (err) {
+          console.error("Error generando tarjeta", err);
+        }
+      }
+      
+      if (successCount === 0) {
+        showEmptyError("No se pudo generar ningún código. Revise el formato o intente con otro código.");
+        infoBar.style.display = "none";
+        return;
+      }
+      
+      container.innerHTML = '';
+      container.appendChild(fragment);
+      
+      // Mostrar barra de información
+      infoBar.style.display = "flex";
+      statsBadge.innerHTML = `✅ ${successCount} código(s) de barras · "${trimmedCode}"`;
+    }
+    
+    function showEmptyError(message) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="error-msg" style="display: inline-block; margin-bottom: 0.6rem;">⚠️ Error</div>
+          <p>${message}</p>
+          <small>Ejemplo válido: "ABC123", "750123456789", "COD-001"</small>
+        </div>
+      `;
+    }
+    
+    function showTemporaryMessage(msg, type = "info") {
+      const toast = document.createElement('div');
+      toast.textContent = msg;
+      toast.style.position = 'fixed';
+      toast.style.bottom = '25px';
+      toast.style.left = '50%';
+      toast.style.transform = 'translateX(-50%)';
+      toast.style.backgroundColor = type === 'warn' ? '#e67e22' : '#2c7da0';
+      toast.style.color = 'white';
+      toast.style.padding = '0.5rem 1.2rem';
+      toast.style.borderRadius = '40px';
+      toast.style.fontSize = '0.85rem';
+      toast.style.zIndex = '999';
+      toast.style.fontWeight = '500';
+      toast.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 2000);
+    }
+    
+    // IMPRESIÓN GLOBAL CORREGIDA: regenera todos los códigos de barras en una nueva ventana
+    async function printAllBarcodes() {
+      const cards = document.querySelectorAll('.barcode-card');
+      if (!cards.length) {
+        alert('No hay códigos de barras generados. Genere algunos primero.');
+        return;
+      }
+      
+      // Recolectar información de cada tarjeta actual (código e índice)
+      const itemsData = [];
+      cards.forEach((card, idx) => {
+        const codeSpan = card.querySelector('.barcode-value');
+        let code = '';
+        if (codeSpan) code = codeSpan.textContent;
+        const indexSpan = card.querySelector('.index-badge');
+        let indexText = '';
+        if (indexSpan) indexText = indexSpan.textContent;
+        // Extraer número de copia si es posible
+        let copyNumber = idx + 1;
+        let total = cards.length;
+        if (indexText) {
+          const match = indexText.match(/Copia (\d+) de (\d+)/);
+          if (match) {
+            copyNumber = parseInt(match[1], 10);
+            total = parseInt(match[2], 10);
+          }
+        }
+        itemsData.push({ code, copyNumber, total });
+      });
+      
+      // Abrir ventana de impresión
+      const printWin = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
+      if (!printWin) {
+        alert("Permita ventanas emergentes para imprimir.");
+        return;
+      }
+      
+      // Construimos el HTML con todos los estilos y regeneramos los canvas usando JsBarcode
+      printWin.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Imprimir todos los códigos de barras</title>
+          <meta charset="UTF-8">
+          <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"><\/script>
+          <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            body {
+              background: white;
+              padding: 1.2rem;
+              font-family: system-ui, sans-serif;
+            }
+            h2 {
+              text-align: center;
+              margin-bottom: 1.5rem;
+              color: #1f4e6e;
+              font-size: 1.4rem;
+            }
+            .print-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+              gap: 1.5rem;
+            }
+            .print-card {
+              border: 1px solid #ccc;
+              border-radius: 1rem;
+              padding: 1rem;
+              background: white;
+              text-align: center;
+              page-break-inside: avoid;
+              break-inside: avoid;
+            }
+            .barcode-canvas-print {
+              max-width: 100%;
+              margin: 0.5rem 0;
+            }
+            .idx-label {
+              font-size: 0.7rem;
+              background: #eef2f5;
+              display: inline-block;
+              padding: 0.1rem 0.7rem;
+              border-radius: 20px;
+              margin-bottom: 0.5rem;
+            }
+            .code-value-print {
+              font-weight: bold;
+              font-family: monospace;
+              background: #f3f6fa;
+              padding: 0.2rem 0.8rem;
+              border-radius: 30px;
+              margin-top: 0.6rem;
+              font-size: 0.85rem;
+              word-break: break-all;
+            }
+            @media print {
+              body {
+                padding: 0.2in;
+              }
+              .print-card {
+                border: 1px solid #aaa;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <h2>📋 Reporte de códigos de barras</h2>
+          <div class="print-grid" id="printGrid"></div>
+          <script>
+            const items = ${JSON.stringify(itemsData)};
+            const gridContainer = document.getElementById('printGrid');
+            function renderAll() {
+              items.forEach((item, idx) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'print-card';
+                const idxSpan = document.createElement('div');
+                idxSpan.className = 'idx-label';
+                idxSpan.textContent = "Todo-Electro";
+                cardDiv.appendChild(idxSpan);
+                
+                const canvasElem = document.createElement('canvas');
+                canvasElem.className = 'barcode-canvas-print';
+                canvasElem.width = 300;
+                canvasElem.height = 70;
+                canvasElem.style.width = '100%';
+                canvasElem.style.height = 'auto';
+                cardDiv.appendChild(canvasElem);
+                
+                const codeDiv = document.createElement('div');
+                codeDiv.className = 'code-value-print';
+                codeDiv.textContent = item.code;
+                cardDiv.appendChild(codeDiv);
+                
+                gridContainer.appendChild(cardDiv);
+                
+                // Dibujar código de barras en el canvas
+                try {
+                  JsBarcode(canvasElem, item.code, {
+                    format: "CODE128",
+                    lineColor: "#000000",
+                    width: 2,
+                    height: 55,
+                    displayValue: false,
+                    margin: 6,
+                    background: "#ffffff"
+                  });
+                } catch(e) {
+                  console.error("Error dibujando", e);
+                  const errMsg = document.createElement('div');
+                  errMsg.textContent = "Error código";
+                  errMsg.style.color = "red";
+                  cardDiv.appendChild(errMsg);
+                }
+              });
+              
+              // Después de renderizar, lanzar diálogo de impresión
+              window.onload = () => {
+                window.print();
+                setTimeout(() => window.close(), 800);
+              };
+            }
+            renderAll();
+          <\/script>
+        </body>
+        </html>
+      `);
+      printWin.document.close();
+    }
+    
+    // Event listeners
+    generateBtn.addEventListener('click', generateMultipleBarcodes);
+    printAllBtn.addEventListener('click', printAllBarcodes);
+    
+    // Enter en campos
+    codeInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') generateMultipleBarcodes(); });
+    quantityInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') generateMultipleBarcodes(); });
+    
+    // Generar demo inicial para mostrar funcionamiento correcto (con valores por defecto)
+    setTimeout(() => {
+      if (container.children.length === 1 && container.querySelector('.empty-state')) {
+        generateMultipleBarcodes();
+      }
+    }, 150);
+  })();
+</script>
+</body>
+</html>

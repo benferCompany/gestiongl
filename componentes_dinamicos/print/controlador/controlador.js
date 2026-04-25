@@ -1,4 +1,5 @@
 
+import { tipoPago } from "../../facturador/vista/tipoPago.js";
 import { stylePrint } from "../style/style.js";
 
 /*
@@ -31,6 +32,12 @@ const objeto = {
 
 
 export function crearFacturaHTML(data) {
+    
+    data.total = parseFloat(data.total)
+    data.subTotal = parseFloat(data.subTotal);
+    data.totalMontoFinal = (data.pagos??data.datosFactura.pagos).reduce(
+            (acc, p) => acc + (p.monto_final || p.monto),0);
+    console.log(data)
     const PRODUCTOS_POR_PAGINA = 10;
     const totalPaginas = Math.ceil(data.productos.length / PRODUCTOS_POR_PAGINA);
 
@@ -38,7 +45,7 @@ export function crearFacturaHTML(data) {
     // NORMALIZAR CLIENTE / PROVEEDOR
     // ===============================
     function normalizarPersona(data) {
-        
+
         if (data.cliente) {
             return {
                 titulo: "Datos del Cliente",
@@ -87,7 +94,7 @@ export function crearFacturaHTML(data) {
         header.className = "factura-header";
 
         const titulo = document.createElement("h1");
-        titulo.textContent = "Factura";
+        titulo.textContent = "Presupuesto";
 
         const nroFactura = document.createElement("p");
         nroFactura.textContent = `N° Factura: ${data.id_factura_proveedor||data.id_factura_cliente}`;
@@ -142,12 +149,15 @@ export function crearFacturaHTML(data) {
 
         // ===== TOTALES (solo última página) =====
         if (esUltimaPagina) {
+
+            
             const totales = document.createElement("div");
             totales.className = "factura-totales";
             totales.innerHTML = `
                 <p><strong>Subtotal:</strong> $${parseFloat(data.subTotal).toFixed(2)}</p>
-                <p><strong>Descuento:</strong> $${data.descuento}</p>
-                <h3>Total: $${parseFloat(data.total).toFixed(2)}</h3>
+                <p><strong>Descuento:</strong> $${(data.total - data.subTotal).toFixed(2)}</p>
+                <p><table style="width:auto;"><tbody><tr>${(data.pagos??data.datosFactura.pagos).map(p=>{return`<td>${p.tipo_pago?p.tipo_pago.nombre:p.descripcion} ${p.monto_final??p.monto}</td>`}).join("")}<td>Recargos ${(data.pagos??data.datosFactura.pagos).map(p=>{return`${p.tipo_pago?p.tipo_pago.nombre:p.descripcion}`}).join(" ")}: <strong>${(data.totalMontoFinal - data.total).toFixed(2)}</strong></td></tr></tbody></table>
+                <h3>Total: $${parseFloat(data.totalMontoFinal).toFixed(2)}</h3>
             `;
             pagina.appendChild(totales);
         }
@@ -166,7 +176,7 @@ export function crearFacturaHTML(data) {
     // ===============================
     
     const facturaHTML = factura.outerHTML;
-
+    
 
 
     const datosComercio = `
@@ -231,7 +241,11 @@ export function crearFacturaHTML(data) {
 
 
 export function crearHTMLTicket(data) {
-
+     data.total = parseFloat(data.total)
+    data.subTotal = parseFloat(data.subTotal);
+    data.totalMontoFinal = (data.pagos??data.datosFactura.pagos).reduce(
+            (acc, p) => acc + (p.monto_final || p.monto),0);
+    console.log(data)
     function normalizarPersona(data) {
         if (data.cliente) {
             return {
@@ -386,8 +400,10 @@ export function crearHTMLTicket(data) {
             <div class="line"></div>
 
             <div class="right">Subtotal: $${parseFloat(data.subTotal).toFixed(2)}</div>
-            <div class="right">Descuento: $${data.descuento}</div>
-            <div class="right"><strong>TOTAL: $${parseFloat(data.total).toFixed(2)}</strong></div>
+            <div class="right">Descuento: $${(data.total - data.subTotal).toFixed(2)}</div>
+            ${(data.pagos??data.datosFactura.pagos).map(p=>{return`<div>${p.tipo_pago?p.tipo_pago.nombre:p.descripcion} ${p.monto_final??p.monto}</div>`}).join("")}
+            <div>Recargos ${(data.pagos??data.datosFactura.pagos).map(p=>{return`${p.tipo_pago?p.tipo_pago.nombre:p.descripcion}`}).join(" ")}: $${(data.totalMontoFinal - data.total).toFixed(2)}</div>
+            <div class="right"><strong>TOTAL: $${parseFloat(data.totalMontoFinal).toFixed(2)}</strong></div>
 
             <div class="line"></div>
 

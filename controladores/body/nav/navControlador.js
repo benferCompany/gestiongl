@@ -2,6 +2,8 @@
 import { subNavegador } from "../../../vistas/body/nav/subnav/subNav.js";
 import { contenidoCliente } from "../../../vistas/principales/Personas/Cliente/contenidoCliente.js";
 import { contenidoProveedor } from "../../../vistas/principales/Personas/Proveedor/contenidoProveedor.js";
+import { contenidoCierreCaja } from "../../../vistas/principales/balances/cierreDeCaja/contenido.js";
+import { contenidoGanancia } from "../../../vistas/principales/balances/ganancias/contenido.js";
 import { contenidoCompra } from "../../../vistas/principales/factura/compra/contenido.js";
 import { getFacturas } from "../../../vistas/principales/factura/facturas/contenido.js";
 import { contenidoVenta } from "../../../vistas/principales/factura/venta/contenido.js";
@@ -106,6 +108,31 @@ export const navControlador = (nav) => {
             subNavegador(param)
 
 
+        }
+
+        if (e.target == getButtonByText(nav, "BALANCES")) {
+
+              const CierreDeCaja = {
+                evento: () => {
+                    contenido.innerHTML = ""
+                    contenidoCierreCaja();
+                },
+                nombre: "Cierre de Caja"
+            }
+
+            const ganancias = {
+                evento: () => {
+                    contenido.innerHTML = ""
+                    contenidoGanancia();
+                },
+                nombre: "Ganancias"
+            }
+
+            const param = {
+                botonesNombre: [eventoButton(CierreDeCaja), eventoButton(ganancias)]
+
+            }
+            subNavegador(param)
         }
     })
 }   

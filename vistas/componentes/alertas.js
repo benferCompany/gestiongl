@@ -55,6 +55,7 @@ export const mostrarAlerta = function (param) {
               opacity: 0; 
               transform: translate(-50%, -70%);
               filter: blur(4px);
+              display:none;
             }
           }
           
