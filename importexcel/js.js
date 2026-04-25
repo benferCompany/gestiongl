@@ -68,7 +68,7 @@ const crearProductosSecuencialmente = async (productos) => {
 
   for (const producto of productos) {
     try {
-      const response = await fetch("https://todoelectro.store/servicios/principales/inventario/producto/crear.php", {
+      const response = await fetch("https://gestiontd.todoelectro.store/servicios/principales/inventario/producto/crear.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(producto)
