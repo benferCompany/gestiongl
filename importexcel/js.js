@@ -1,4 +1,4 @@
-import { URL } from "../controladores/url/url.js";
+import { URL } from "../../controladores/url/url.js";
 
 let excelData = [];
 
