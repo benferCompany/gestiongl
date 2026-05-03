@@ -127,7 +127,7 @@ const getTipoPago = async()=>{
    
     try{
 
-        const response = await fetch(URL + "servicios/principales/factura/tipo_pago/consultaTipoPago.php");
+        const response = await fetch(URL + "/servicios/principales/factura/tipo_pago/consultaTipoPago.php");
         const data = await response.json();
         return data;
     }catch(e){
@@ -140,7 +140,7 @@ const getTipoFactura = async()=>{
    
     try{
 
-        const response = await fetch(URL + "servicios/principales/factura/tipo_factura/consultaTipoFactura.php");
+        const response = await fetch(URL + "/servicios/principales/factura/tipo_factura/consultaTipoFactura.php");
         const data = await response.json();
         return data;
     }catch(e){

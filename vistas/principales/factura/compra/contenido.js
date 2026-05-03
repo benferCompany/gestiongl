@@ -17,7 +17,7 @@ const param = {
         },
         {
             value: "Generar Factura (F8)", evento: async (e,div) => {
-                tipoPago(e,div,URL + "servicios/principales/factura/compra/crearCompra.php","compra");    
+                tipoPago(e,div,URL + "/servicios/principales/factura/compra/crearCompra.php","compra");    
             }
         }
     ],

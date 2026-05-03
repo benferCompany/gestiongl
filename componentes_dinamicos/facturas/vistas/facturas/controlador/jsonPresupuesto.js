@@ -41,7 +41,7 @@ export const paramPresupuesto = {
             id: "",
             placeholder: "Cliente",
             selector: true,
-            url: URL + "servicios/principales/cliente/buscarCliente.php"
+            url: URL + "/servicios/principales/cliente/buscarCliente.php"
         }
     ],
 
@@ -56,7 +56,7 @@ export const paramPresupuesto = {
                 tipoPago(
                     e,
                     div,
-                    URL + "servicios/principales/factura/venta/crearVenta.php",
+                    URL + "/servicios/principales/factura/venta/crearVenta.php",
                     "venta"
                 );
             }
