@@ -5,7 +5,7 @@ import { facturaCss } from "../style/cssFactura.js";
 import { jsSelectInputCliente } from "../../select/controlador/jsSelectInput.js";
 
 export const factura = (param) => {
-
+    console.log(param);
     param.tipoObject = param.inputs[0].name;
     /* ===============================
        LIMPIEZA DE FACTURA ANTERIOR

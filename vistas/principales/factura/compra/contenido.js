@@ -8,7 +8,7 @@ import { URL } from "../../../../controladores/url/url.js";
 const param = {
     inputs: [
         
-        { type: "text", name: "proveedor", id: "", placeholder: "Proveedor", selector:true, url: URL + "servicios/principales/proveedor/buscarProveedor.php"},
+        { type: "text", name: "proveedor", id: "", placeholder: "Proveedor", selector:true, url: URL + "/servicios/principales/proveedor/buscarProveedor.php"},
         { type: "text", name: "id_factura_proveedor", id: "", placeholder: "Id Factura proveedor" }
     ],
     button: [
