@@ -103,12 +103,11 @@ try {
         "factura" => $factura
     ]);
 
-} catch (PDOException $e) {
+}catch (PDOException $e) {
     $pdo->rollBack();
-    http_response_code(500);
     echo json_encode([
-        "status" => "error",
-        "message" => "No se pudo crear la factura de venta",
-        "error" => $e->getMessage()
+        "error_real" => $e->getMessage(),
+        "codigo" => $e->getCode()
     ]);
+    exit;
 }
