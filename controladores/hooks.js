@@ -96,6 +96,7 @@ export const consultaPorTexto = async (param) => {
 
 
 export const guardardarDatos = async (URL, datos) => {
+  console.log("DATOS QUE ENVÍO:", datos);
   try {
     const response = await fetch(URL, {
       method: "POST",
